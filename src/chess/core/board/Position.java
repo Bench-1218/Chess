@@ -1,6 +1,4 @@
-package chess.core.pieces;
-
-import chess.core.board.Board;
+package chess.core.board;
 
 public class Position {
     private final int x, y;

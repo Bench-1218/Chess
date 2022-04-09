@@ -1,9 +1,7 @@
 package chess.core.board;
 
-import java.util.Map;
 import java.util.Set;
-import chess.core.pieces.Pieces;
-import chess.core.pieces.Position;
+import chess.core.pieces.Piece;
 import chess.core.player.Player.Alliance;
 
 public class Board {
@@ -12,7 +10,7 @@ public class Board {
     private Alliance turn;
     private boolean whiteKingExist;
     private boolean blackKingExist;
-    private Map<Position, Pieces> board;
+    private Piece[][] board ;
     private Steps steps;
 
     private void resetSteps(){
@@ -33,25 +31,32 @@ public class Board {
         resetSteps();
     }
 
-    public Map<Position, Pieces> getBoard() {
-        return board;
+    public char[][] getBoard() {
+        char[][] charBoard = new char[Board.HEIGHT][Board.WIDTH];
+        for(int y = 0; y < Board.HEIGHT; y++){
+            for(int x = 0; x < Board.WIDTH; x++){
+                charBoard[x][y] = board[x][y].toString().charAt(0);
+            }
+        }
+        return charBoard;
+        
     }
 
     public Set<Position> getAvailablPositions(int x, int y){
-        return board.get(new Position(x, y)).availablePosition(this);
+        return board[x][y].availablePosition(this);
     }
 
     public boolean movePiece(int x1, int y1, int x2, int y2, Alliance alliance){
         // alliance try to move the piece in (x1, y1) to (x2, y2)
         // if the operation is valid, return true; otherwise return false
-        Position p1 = new Position(x1, y1);
         Position p2 = new Position(x2, y2);
+
         if(alliance != turn){
             System.out.println("It's not your turn");
             return false;
         }
-        if(board.get(p1).availablePosition(this).contains(p2)){
-            board.remove(p1);
+        if(board[x1][y1].availablePosition(this).contains(p2)){
+            board[x1][y1] = null;
             // TODO
             return true;
         }else{

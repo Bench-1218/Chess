@@ -1,5 +1,5 @@
 package chess.core.board;
 
-public class Board {
+public class Move {
     
 }

@@ -1,7 +1,8 @@
 package chess.core.board;
 
 import java.util.Set;
-import chess.core.pieces.Piece;
+
+import chess.core.board.pieces.Piece;
 import chess.core.player.Player.Alliance;
 
 public class Board {
@@ -10,7 +11,7 @@ public class Board {
     private Alliance turn;
     private boolean whiteKingExist;
     private boolean blackKingExist;
-    private Piece[][] board ;
+    private Piece[][] board;
     private Steps steps;
 
     private void resetSteps(){
@@ -31,20 +32,34 @@ public class Board {
         resetSteps();
     }
 
-    public char[][] getBoard() {
+    public char[][] getCharBoard() {
+        // BKNPQR and bknpqr are abbreviations. Notice: N indicates Knight and K indicated King
+        // the uppercase means WHITE and the lowercase means BLACK
         char[][] charBoard = new char[Board.HEIGHT][Board.WIDTH];
         for(int y = 0; y < Board.HEIGHT; y++){
             for(int x = 0; x < Board.WIDTH; x++){
-                charBoard[x][y] = board[x][y].toString().charAt(0);
+                charBoard[x][y] = board[x][y].toChar();
             }
         }
         return charBoard;
-        
     }
 
-    public Set<Position> getAvailablPositions(int x, int y){
-        return board[x][y].availablePosition(this);
+    
+
+    public int[][] getAvailablPositions(int x, int y){
+        // return n-by-2 matrix or null
+        Set<Position> ps = board[x][y].availablePosition(this);
+        if(ps.size()==0) return null;
+        int[][] psInt = new int[ps.size()][2];
+        int i = 0;
+        for(Position p : ps){
+            psInt[i][0] = p.getX();
+            psInt[i][1] = p.getY();
+            i++;
+        }
+        return psInt;
     }
+
 
     public boolean movePiece(int x1, int y1, int x2, int y2, Alliance alliance){
         // alliance try to move the piece in (x1, y1) to (x2, y2)
@@ -80,4 +95,15 @@ public class Board {
         return "NOTHING";
     }
 
+    public static boolean isOutOfBound(int x, int y){
+        if(x >= 0 && x < Board.WIDTH && y >= 0 && y < Board.HEIGHT)
+            return false;
+        else return true;
+    }
+    public static boolean isOutOfBound(Position p){
+        return isOutOfBound(p.getX(), p.getY());
+    }
+    public Alliance getTurn(){
+        return this.turn;
+    }
 }

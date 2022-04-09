@@ -1,6 +1,6 @@
 package chess.core.board;
 
-import chess.core.pieces.Piece.Type;
+import chess.core.board.pieces.Piece.Type;
 
 public class Move {
     private Position p1, p2; // p1 to p2

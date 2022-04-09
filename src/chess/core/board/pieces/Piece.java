@@ -1,4 +1,4 @@
-package chess.core.pieces;
+package chess.core.board.pieces;
 
 import java.util.Set;
 import chess.core.player.Player.Alliance;
@@ -10,11 +10,12 @@ public abstract class Piece {
         BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK;
         
     }
-    
+    private final Position position;
     private final Type type;
     private final Alliance alliance;
 
-    public Piece(Type type, Alliance alliance) {
+    public Piece(Position position, Type type, Alliance alliance) {
+        this.position = position;
         this.type = type;
         this.alliance = alliance;
     }
@@ -27,7 +28,11 @@ public abstract class Piece {
     public Type getType() {
         return type;
     }
-    
+    public Position getPosition(){
+        return position;
+    }
+
     @Override
     public abstract String toString();
+    public abstract char toChar();
 }

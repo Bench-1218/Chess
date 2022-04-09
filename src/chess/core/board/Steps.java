@@ -3,7 +3,7 @@ package chess.core.board;
 import java.util.ArrayList;
 
 public class Steps extends ArrayList<Move>{
-    
+
     @Override
     public synchronized String toString() {
         StringBuilder sb = new StringBuilder();
@@ -18,9 +18,9 @@ public class Steps extends ArrayList<Move>{
     public boolean add(Move m){
 
         if(super.add(m)){
-            // TODO
+            // TODO check if the step is special
         }else return false;
-
+        return true;
     }
     public String getData(){
         return this.toString();

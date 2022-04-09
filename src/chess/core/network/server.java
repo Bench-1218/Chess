@@ -1,5 +1,5 @@
 package chess.core.network;
 
-public class server {
+public class Server {
     
 }

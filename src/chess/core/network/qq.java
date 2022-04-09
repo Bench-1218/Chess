@@ -1,5 +1,5 @@
 package chess.core.network;
 
-public class qq {
+public class QQ {
     
 }

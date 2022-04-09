@@ -9,24 +9,27 @@ import chess.core.player.Player.Alliance;
 
 public class Bishop extends Piece{
     private final int[][] DIRECTION = {{1,1},{1,-1},{-1,1},{-1,-1}};
-    public Bishop(Position position, Type type, Alliance alliance) {
-        super(position, type, alliance);
+    public Bishop(Position position, Alliance alliance) {
+        super(position, Type.BISHOP, alliance);
     }
 
     @Override
-    public Set<Position> availablePosition(Board board) {
+    public Set<Position> availablePosition(final Board board) {
         Set<Position> ps = new HashSet<>();
-        char[][] charBoard = board.getCharBoard();
+        Piece[][] pieces = board.getBoard();
         Position p = this.getPosition();
         int x = p.getX();
         int y = p.getY();
         for(int i = 0; i < 4; i++){
-            for(int s = 0;; s++){
+            for(int s = 1;; s++){
                 int x1 = x + s*DIRECTION[i][0];
                 int y1 = y + s*DIRECTION[i][1];
-                if(Board.isOutOfBound(x1, y1) || board[x1][y1].getAlliance() != this.getAlliance()) break;
-                if(charBoard[x1][y1] == 0){
+                if(Board.isOutOfBound(x1, y1) || pieces[x1][y1].getAlliance() == this.getAlliance()) break;
+                if(pieces[x1][y1] == null){
                     ps.add(new Position(x1, y1));
+                }else if(pieces[x1][y1].getAlliance() != this.getAlliance()){
+                    ps.add(new Position(x1, y1));
+                    break;
                 }
             }
         }
@@ -41,7 +44,7 @@ public class Bishop extends Piece{
 
     @Override
     public char toChar() {
-        return ? this.getAlliance() == Alliance.WHITE: 
+        return this.getAlliance() == Alliance.WHITE ? 'B' : 'b';
     }
     
 }

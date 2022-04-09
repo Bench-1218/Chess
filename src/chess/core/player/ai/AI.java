@@ -8,8 +8,10 @@ public class AI implements Player{
     public static int[] nextStepAI(int algorithm, int time, Board board){
         switch(algorithm){
             case 0:
-            return AlphaBeta.nextStep(time, board);
+            return Random.nextStep(time,board);
             case 1:
+            return AlphaBeta.nextStep(time, board);
+            case 2:
             return MonteCarloTree.nextStep(time, board);
             default:
             System.out.println("algorithem should be a number between 0 and 1");

@@ -1,5 +1,31 @@
 package chess.core.board.pieces;
 
-public class Pawn {
+import java.util.Set;
+
+import chess.core.board.Board;
+import chess.core.board.Position;
+import chess.core.player.Player.Alliance;
+
+public class Pawn extends Piece{
+
+    public Pawn(Position position, Alliance alliance) {
+        super(position, Type.PAWN, alliance);
+    }
+
+    @Override
+    public Set<Position> availablePosition(Board board) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Pawn";
+    }
+
+    @Override
+    public char toChar() {
+        return this.getAlliance() == Alliance.WHITE ? 'W' : 'w';
+    }
     
 }

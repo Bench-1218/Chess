@@ -5,6 +5,7 @@ import chess.core.board.Board;
 public class AlphaBeta {
 
     public static int[] nextStep(int time, Board board) {
+        // TODO
         return null;
     }
     

@@ -13,6 +13,7 @@ public class Board {
     private boolean blackKingExist;
     private Piece[][] board;
     private Steps steps;
+    private int round;
 
     private void resetSteps(){
         // TODO
@@ -21,12 +22,17 @@ public class Board {
         whiteKingExist = true;
         blackKingExist = true;
         turn = Alliance.WHITE;
+        round = 1;
     }
     private void resetBoard(){
         // TODO
     }
 
     public Board(){
+        reset();
+    }
+    
+    public void reset(){
         resetStatus();
         resetBoard();
         resetSteps();
@@ -42,6 +48,10 @@ public class Board {
             }
         }
         return charBoard;
+    }
+
+    public Piece[][] getBoard(){
+        return this.board;
     }
 
     
@@ -82,17 +92,17 @@ public class Board {
     }
 
 
-    public String ifWin(){
-        // output "WHITE" or "BLACK" to represent the winner
-        // output "DRAW" to represent the drawn game
-        // output "NOTHING" to represent that nothing happens
+    public char ifWin(){
+        // output "W" or "B" to represent the winner
+        // output "D" to represent the drawn game
+        // output "N" to represent that nothing happens
         if(turn == Alliance.BLACK){
-            if(!blackKingExist) return "WHITE";
+            if(!blackKingExist) return 'W';
         }else{
-            if(!whiteKingExist) return "BLACK";
+            if(!whiteKingExist) return 'B';
         }
         // TODO draw
-        return "NOTHING";
+        return 'N';
     }
 
     public static boolean isOutOfBound(int x, int y){
@@ -104,6 +114,44 @@ public class Board {
         return isOutOfBound(p.getX(), p.getY());
     }
     public Alliance getTurn(){
+        if(turn == null) System.out.println("Turn is not set");
         return this.turn;
+    }
+    public char getTurnChar(){
+        if(this.turn == Alliance.BLACK) return 'B';
+        if(this.turn == Alliance.WHITE) return 'W';
+        System.out.println("Turn is not set");
+        return 'N';
+    }
+
+    //-------------------------------------------------for usage of debug-------------------------------------------------------
+    public void printBoard() {
+        char[][] charBoard = this.getCharBoard();
+        for(int y = 0; y < Board.HEIGHT; y++){
+            for(int x = 0; x < Board.WIDTH; x++){
+                System.out.print(charBoard[x][y]==0 ? charBoard[x][y] : ' ');
+            }
+            System.out.println();
+        }
+    }
+    public void printAvailablePositions(int x, int y) {
+        int[][] ps = getAvailablPositions(x, y);
+        if(ps == null){
+            System.out.println("No available position");
+        }else{
+            for(int y1 = 0; y1 < Board.HEIGHT; y1++){
+                for(int x1 = 0; x1 < Board.WIDTH; x1++){
+                    boolean available = true;
+                    for(int n = 0; n < ps.length; n++){
+                        if(x1 == ps[n][0] && y1 == ps[n][1]){
+                            available = false;
+                            break;
+                        }
+                    }
+                    System.out.print(available ? 'x' : ' ');
+                }
+                System.out.println();
+            }
+        }
     }
 }

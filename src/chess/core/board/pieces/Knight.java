@@ -21,10 +21,9 @@ public class Knight extends Piece{
         int x = p.getX();
         int y = p.getY();
         for(int i = 0; i < DIRECTION.length; i++){
-            int s = 1;
-            int x1 = x + s*DIRECTION[i][0];
-            int y1 = y + s*DIRECTION[i][1];
-            if(Board.isOutOfBound(x1, y1)) break;
+            int x1 = x + DIRECTION[i][0];
+            int y1 = y + DIRECTION[i][1];
+            if(Board.isOutOfBound(x1, y1)) continue;
             if(pieces[x1][y1] == null){
                 ps.add(new Position(x1, y1));
             }else if(pieces[x1][y1].getAlliance() != this.getAlliance()){

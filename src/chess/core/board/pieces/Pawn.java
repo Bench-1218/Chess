@@ -9,16 +9,16 @@ import chess.core.player.Player.Alliance;
 
 public class Pawn extends Piece{
 
-    private boolean march; // if the Pawn has jumped over two grids
+    private boolean first; // if the Pawn walk the first step
 
     public Pawn(Position position, Alliance alliance) {
         super(position, Type.PAWN, alliance);
-        this.march = false;
+        this.first = false;
     }
 
-    public Pawn(Position position, Alliance alliance, boolean march){
+    public Pawn(Position position, Alliance alliance, boolean first){
         super(position, Type.PAWN, alliance);
-        this.march = march;
+        this.first = first;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Pawn extends Piece{
             if(!Board.isOutOfBound(x, y+1)){
                 if(pieces[x][y+1] == null){
                     ps.add(new Position(x, y+1));
-                    if(!march && !Board.isOutOfBound(x, y+2) && (pieces[x][y+2]==null || pieces[x][y+2].getAlliance() == Alliance.WHITE)){
+                    if(!first && !Board.isOutOfBound(x, y+2) && (pieces[x][y+2]==null || pieces[x][y+2].getAlliance() == Alliance.WHITE)){
                         ps.add(new Position(x, y+2));
                     }
                 } else if(pieces[x][y+1].getAlliance() == Alliance.WHITE){
@@ -47,12 +47,13 @@ public class Pawn extends Piece{
             if(!Board.isOutOfBound(x-1,y+1) && pieces[x-1][y+1] != null && pieces[x-1][y+1].getAlliance() == Alliance.WHITE){
                 ps.add(new Position(x-1, y+1));
             }
+            
 
         }else{
             if(!Board.isOutOfBound(x, y-1)){
                 if(pieces[x][y-1] == null){
                     ps.add(new Position(x, y-1));
-                    if(!march && !Board.isOutOfBound(x, y-2) && (pieces[x][y-2]==null || pieces[x][y-2].getAlliance() == Alliance.BLACK)){
+                    if(!first && !Board.isOutOfBound(x, y-2) && (pieces[x][y-2]==null || pieces[x][y-2].getAlliance() == Alliance.BLACK)){
                         ps.add(new Position(x, y-2));
                     }
                 } else if(pieces[x][y-1].getAlliance() == Alliance.BLACK){
@@ -60,10 +61,10 @@ public class Pawn extends Piece{
                 }
             }
 
-            if(!Board.isOutOfBound(x+1,y-1) && pieces[x+1][y-1] != null && pieces[x+1][y-1].getAlliance() == Alliance.WHITE){
+            if(!Board.isOutOfBound(x+1,y-1) && pieces[x+1][y-1] != null && pieces[x+1][y-1].getAlliance() == Alliance.BLACK){
                 ps.add(new Position(x+1, y-1));
             }
-            if(!Board.isOutOfBound(x-1,y-1) && pieces[x-1][y-1] != null && pieces[x-1][y-1].getAlliance() == Alliance.WHITE){
+            if(!Board.isOutOfBound(x-1,y-1) && pieces[x-1][y-1] != null && pieces[x-1][y-1].getAlliance() == Alliance.BLACK){
                 ps.add(new Position(x-1, y-1));
             }
         }
@@ -72,12 +73,12 @@ public class Pawn extends Piece{
         return ps;
     }
 
-    public void setMarch(boolean m){
-        this.march = m;
+    public void setFirst(boolean m){
+        this.first = m;
     }
 
-    public boolean getMarch(){
-        return this.march;
+    public boolean getFirst(){
+        return this.first;
     }
 
     @Override

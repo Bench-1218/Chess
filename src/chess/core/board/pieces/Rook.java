@@ -8,7 +8,7 @@ import chess.core.board.Position;
 import chess.core.player.Player.Alliance;
 
 public class Rook extends Piece{
-    private final int[][] DIRECTION = {{0,1},{0,-1},{1,0},{1,-1}};
+    private final int[][] DIRECTION = {{0,1},{0,-1},{1,0},{-1,0}};
 
     public Rook(Position position, Alliance alliance) {
         super(position, Type.ROOK, alliance);
@@ -35,6 +35,7 @@ public class Rook extends Piece{
                     ps.add(new Position(x1,y1));
                 }else if(pieces[x1][y1].getAlliance() != this.getAlliance()){
                     ps.add(new Position(x1,y1));
+                    break;
                 }else if(pieces[x1][y1].getAlliance() == this.getAlliance()){
                     break;
                 }else{

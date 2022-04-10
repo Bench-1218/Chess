@@ -10,7 +10,7 @@ public abstract class Piece {
         BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK;
         
     }
-    private final Position position;
+    private Position position;
     private final Type type;
     private final Alliance alliance;
 
@@ -64,6 +64,9 @@ public abstract class Piece {
     }
     public Position getPosition(){
         return position;
+    }
+    public void setPosition(Position position){
+        this.position = position;
     }
     
     public abstract Set<Position> availablePosition(Board board);

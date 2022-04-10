@@ -2,7 +2,9 @@ package chess.core.board;
 
 import java.util.Set;
 
+
 import chess.core.board.pieces.*;
+import chess.core.board.pieces.Piece.Type;
 import chess.core.player.Player.Alliance;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -125,9 +127,16 @@ public class Board {
 
     
 
-    public int[][] getAvailablPositions(int x, int y){
+    public int[][] getAvailablePositions(int x, int y){
         // return n-by-2 matrix or null
-        if(board[x][y] == null) return null;
+        if(Board.isOutOfBound(x, y)){
+            System.out.printf("Your input (%d, %d) is out of boundary when incoking getAvailablePositions\n", x, y);
+            return null;
+        }
+        if(board[x][y] == null) {
+            System.out.printf("no piece at (%d, %d)\n", x, y);
+            return null;
+        }
         Set<Position> ps = board[x][y].availablePosition(this);
         if(ps.size()==0) return null;
         int[][] psInt = new int[ps.size()][2];
@@ -140,27 +149,60 @@ public class Board {
         return psInt;
     }
 
-
-    public boolean movePiece(int x1, int y1, int x2, int y2, Alliance alliance){
-        // alliance try to move the piece in (x1, y1) to (x2, y2)
-        // if the operation is valid, return true; otherwise return false
+    public boolean isAvailable(int x1, int y1, int x2, int y2){
+        Position p1 = new Position(x1, y1);
         Position p2 = new Position(x2, y2);
-
-        if(alliance != turn){
-            System.out.println("It's not your turn");
-            return false;
+        boolean valid = true;
+        if(board[x1][y1] == null){
+            System.out.println("there is no piece at " + p1 + "\n");
+            valid = false;
+        }else if(board[x1][y1].getAlliance() != this.turn){
+            System.out.println("it is not your turn");
+            valid = false;
+        } else{
+            Boolean contain = false;
+            Set<Position> ps = board[x1][y1].availablePosition(this);
+            for(Position p : ps){
+                if(p.equals(p2)) contain = true;
+            }
+            if(!contain){
+                System.out.println("the piece cannot go to " + p2);
+                valid = false;
+            }
         }
-        if(board[x1][y1].availablePosition(this).contains(p2)){
-            board[x1][y1] = null;
-            // TODO
-            return true;
-        }else{
-            System.out.println("the position "+ p2 +" is not available");
-            return false;
-        }
-
+        return valid;
     }
 
+    public boolean movePiece(int x1, int y1, int x2, int y2){
+        // alliance try to move the piece in (x1, y1) to (x2, y2)
+        // if the operation is valid, return true; otherwise return false
+        if(!isAvailable(x1, y1, x2, y2)) return false;
+        if(board[x2][y2] == null || board[x2][y2].getAlliance() != board[x1][y1].getAlliance()){
+            if(board[x1][y1].getType() == Type.PAWN || ((Pawn)board[x1][y1]).getFirst()==false){
+                ((Pawn)board[x1][y1]).setFirst(true);
+            }
+            board[x1][y1].setPosition(new Position(x2, y2));
+            board[x2][y2] = board[x1][y1];
+            board[x1][y1] = null;
+            this.nextTurn();
+        }else{
+            System.out.printf("something wrong happened at movePiece(%d, %d, %d, %d)\n",x1, y1, x1, y2);
+        }
+
+        return true;
+    }
+
+    public void nextTurn(){
+        if(turn == Alliance.WHITE) turn = Alliance.BLACK;
+        else{
+            turn = Alliance.WHITE;
+            round++;
+        }
+    }
+
+    public int getRound(){
+        return this.round;
+    }
 
     public char ifWin(){
         // output "W" or "B" to represent the winner
@@ -197,6 +239,7 @@ public class Board {
     //-------------------------------------------------for usage of debug-------------------------------------------------------
     public void printBoard() {
         char[][] charBoard = this.getCharBoard();
+        System.out.printf("round %d: %s\n", this.getRound(), this.getTurn());
         for(int y = 0; y < Board.HEIGHT; y++){
             for(int x = 0; x < Board.WIDTH; x++){
                 System.out.print(charBoard[x][y]);
@@ -206,7 +249,7 @@ public class Board {
         System.out.println();
     }
     public void printAvailablePositions(int x, int y) {
-        int[][] ps = getAvailablPositions(x, y);
+        int[][] ps = getAvailablePositions(x, y);
         char[][] charBoard = getCharBoard();
         if(ps == null){
             System.out.println("No available position");

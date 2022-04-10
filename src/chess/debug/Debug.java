@@ -17,6 +17,9 @@ public class Debug {
                 int y = sc.nextInt();
                 board.printAvailablePositions(x, y);
             }else if(code == 2){
+                board.movePiece(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt());
+                board.printBoard();
+                System.out.println();
             }else break;
         }
         sc.close();

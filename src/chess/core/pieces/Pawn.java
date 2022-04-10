@@ -3,6 +3,7 @@ package chess.core.pieces;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import chess.core.board.Board;
 import chess.core.board.Position;
 import chess.core.player.Player.Alliance;

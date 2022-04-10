@@ -58,4 +58,11 @@ public class Control {
         // return the number of round
         return board.getRound();
     }
+    public static void setPiece(int x, int y, char type){
+        // change the piece at (x, y) to what you want
+        // type can be BKNPQRbknpqrx where x represent null
+        // in another word input 'x' means remove the chess on (x, y)
+        // this function is meant to provide alternatives for Promotion of Pawn
+        board.setPiece(x, y, type);
+    }
 }

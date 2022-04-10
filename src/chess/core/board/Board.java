@@ -227,5 +227,8 @@ public class Board {
         System.out.println("Turn is not set");
         return 'N';
     }
+    public void setPiece(int x, int y, char type) {
+        board[x][y] = Piece.pieceGenerator(type, x, y);
+    }
 
 }

@@ -1,4 +1,4 @@
-package chess.core.board.pieces;
+package chess.core.pieces;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +45,11 @@ public class Knight extends Piece{
     @Override
     public char toChar() {
         return this.getAlliance() == Alliance.WHITE?'N':'n';
+    }
+
+    @Override
+    public void nextTurn() {
+        
     }
 
 }

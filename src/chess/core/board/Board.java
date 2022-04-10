@@ -2,9 +2,7 @@ package chess.core.board;
 
 import java.util.Set;
 
-
-import chess.core.board.pieces.*;
-import chess.core.board.pieces.Piece.Type;
+import chess.core.pieces.*;
 import chess.core.player.Player.Alliance;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +57,7 @@ public class Board {
     }
 
     private void put(char type, int x, int y){
-        Piece p = pieceGenerator(type, x , y);
+        Piece p = Piece.pieceGenerator(type, x , y);
         if(p != null){
             put(p);
         }
@@ -70,29 +68,6 @@ public class Board {
             for(int x = 0; x < Board.WIDTH; x++){
                 put(type[x][y], x, y);
             }
-        }
-    }
-
-    private Piece pieceGenerator(char type, int x, int y){
-        Piece.Type t = Piece.char2Type(type);
-        Alliance alli = Piece.char2Alliance(type);
-        if(t == null) return null;
-        switch(t){
-            case BISHOP:
-                return new Bishop(new Position(x, y), alli);
-            case KING:
-                return new King(new Position(x,y), alli);
-            case KNIGHT:
-                return new Knight(new Position(x,y), alli);
-            case PAWN:
-                return new Pawn(new Position(x,y), alli);
-            case QUEEN:
-                return new Queen(new Position(x,y), alli);
-            case ROOK:
-                return new Rook(new Position(x,y), alli);
-            default:
-                System.out.println("fail to generate piece");
-                return null;
         }
     }
 
@@ -124,8 +99,6 @@ public class Board {
     public Piece[][] getBoard(){
         return this.board;
     }
-
-    
 
     public int[][] getAvailablePositions(int x, int y){
         // return n-by-2 matrix or null
@@ -178,18 +151,31 @@ public class Board {
         // if the operation is valid, return true; otherwise return false
         if(!isAvailable(x1, y1, x2, y2)) return false;
         if(board[x2][y2] == null || board[x2][y2].getAlliance() != board[x1][y1].getAlliance()){
-            if(board[x1][y1].getType() == Type.PAWN || ((Pawn)board[x1][y1]).getFirst()==false){
-                ((Pawn)board[x1][y1]).setFirst(true);
-            }
-            board[x1][y1].setPosition(new Position(x2, y2));
-            board[x2][y2] = board[x1][y1];
-            board[x1][y1] = null;
-            this.nextTurn();
+            board[x1][y1].move(x2, y2, this);
+            nextTurn();
         }else{
             System.out.printf("something wrong happened at movePiece(%d, %d, %d, %d)\n",x1, y1, x1, y2);
         }
-
         return true;
+    }
+
+    public static boolean strongNear(int x1, int y1, int x2, int y2){
+        if(x1-x2==0 && (y1-y2==1 || y1-y2==-1)) return true;
+        if(y1-y2==0 && (x1-x2==1 || x1-x2==-1)) return true;
+        return false;
+    }
+    
+    public static boolean weakNear(int x1, int y1, int x2, int y2){
+        if(x1==x2 && y1==y2) return false;
+        if((x1-x2 >= -1 || x1-x2 <= 1) && (y1-y2 >= -1 || y1-y2 <= 1)) return true;
+        return true;
+    }
+
+    public static boolean isDiagonal(int x1, int y1, int x2, int y2){
+        int dx = x1-x2;
+        int dy = y1-y2;
+        if((dx == 1 || dx == -1) && (dy == 1 || dy == -1)) return true;
+        return false;
     }
 
     public void nextTurn(){
@@ -197,6 +183,12 @@ public class Board {
         else{
             turn = Alliance.WHITE;
             round++;
+        }
+        for(int x = 0; x < Board.WIDTH; x++){
+            for(int y = 0; y < Board.HEIGHT; y++){
+                if(board[x][y]!=null)
+                    board[x][y].nextTurn();
+            }
         }
     }
 
@@ -236,38 +228,4 @@ public class Board {
         return 'N';
     }
 
-    //-------------------------------------------------for usage of debug-------------------------------------------------------
-    public void printBoard() {
-        char[][] charBoard = this.getCharBoard();
-        System.out.printf("round %d: %s\n", this.getRound(), this.getTurn());
-        for(int y = 0; y < Board.HEIGHT; y++){
-            for(int x = 0; x < Board.WIDTH; x++){
-                System.out.print(charBoard[x][y]);
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-    public void printAvailablePositions(int x, int y) {
-        int[][] ps = getAvailablePositions(x, y);
-        char[][] charBoard = getCharBoard();
-        if(ps == null){
-            System.out.println("No available position");
-        }else{
-            for(int y1 = 0; y1 < Board.HEIGHT; y1++){
-                for(int x1 = 0; x1 < Board.WIDTH; x1++){
-                    boolean available = false;
-                    for(int n = 0; n < ps.length; n++){
-                        if(x1 == ps[n][0] && y1 == ps[n][1]){
-                            available = true;
-                            break;
-                        }
-                    }
-                    System.out.print(available ? ' ' : charBoard[x1][y1]);
-                }
-                System.out.println();
-            }
-        }
-        System.out.println();
-    }
 }

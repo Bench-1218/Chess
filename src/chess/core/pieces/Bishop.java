@@ -1,4 +1,4 @@
-package chess.core.board.pieces;
+package chess.core.pieces;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,14 +7,14 @@ import chess.core.board.Board;
 import chess.core.board.Position;
 import chess.core.player.Player.Alliance;
 
-public class Queen extends Piece{
-    private final int[][] DIRECTION = {{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1},{0,-1},{1,-1}};
-    public Queen(Position position, Alliance alliance) {
-        super(position, Type.QUEEN, alliance);
+public class Bishop extends Piece{
+    private final int[][] DIRECTION = {{1,1},{1,-1},{-1,1},{-1,-1}};
+    public Bishop(Position position, Alliance alliance) {
+        super(position, Type.BISHOP, alliance);
     }
 
     @Override
-    public Set<Position> availablePosition(Board board) {
+    public Set<Position> availablePosition(final Board board) {
         Set<Position> ps = new HashSet<>();
         Piece[][] pieces = board.getBoard();
         Position p = this.getPosition();
@@ -43,12 +43,17 @@ public class Queen extends Piece{
 
     @Override
     public String toString() {
-        return "Queen";
+        return "Bishop";
     }
 
     @Override
     public char toChar() {
-        return this.getAlliance() == Alliance.WHITE ? 'Q' : 'q';
+        return this.getAlliance() == Alliance.WHITE ? 'B' : 'b';
+    }
+
+    @Override
+    public void nextTurn() {
+        
     }
     
 }

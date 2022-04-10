@@ -19,7 +19,7 @@ public class Board {
     private int round;
 
     private void resetSteps(){
-        // TODO
+        steps = new Steps();
     }
     private void resetStatus(){
         whiteKingExist = true;
@@ -127,6 +127,7 @@ public class Board {
 
     public int[][] getAvailablPositions(int x, int y){
         // return n-by-2 matrix or null
+        if(board[x][y] == null) return null;
         Set<Position> ps = board[x][y].availablePosition(this);
         if(ps.size()==0) return null;
         int[][] psInt = new int[ps.size()][2];
@@ -202,25 +203,28 @@ public class Board {
             }
             System.out.println();
         }
+        System.out.println();
     }
     public void printAvailablePositions(int x, int y) {
         int[][] ps = getAvailablPositions(x, y);
+        char[][] charBoard = getCharBoard();
         if(ps == null){
             System.out.println("No available position");
         }else{
             for(int y1 = 0; y1 < Board.HEIGHT; y1++){
                 for(int x1 = 0; x1 < Board.WIDTH; x1++){
-                    boolean available = true;
+                    boolean available = false;
                     for(int n = 0; n < ps.length; n++){
                         if(x1 == ps[n][0] && y1 == ps[n][1]){
-                            available = false;
+                            available = true;
                             break;
                         }
                     }
-                    System.out.print(available ? 'x' : ' ');
+                    System.out.print(available ? ' ' : charBoard[x1][y1]);
                 }
                 System.out.println();
             }
         }
+        System.out.println();
     }
 }

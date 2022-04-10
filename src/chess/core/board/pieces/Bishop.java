@@ -20,21 +20,25 @@ public class Bishop extends Piece{
         Position p = this.getPosition();
         int x = p.getX();
         int y = p.getY();
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < DIRECTION.length; i++){
             for(int s = 1;; s++){
                 int x1 = x + s*DIRECTION[i][0];
                 int y1 = y + s*DIRECTION[i][1];
-                if(Board.isOutOfBound(x1, y1) || pieces[x1][y1].getAlliance() == this.getAlliance()) break;
+                if(Board.isOutOfBound(x1, y1)) break;
                 if(pieces[x1][y1] == null){
                     ps.add(new Position(x1, y1));
                 }else if(pieces[x1][y1].getAlliance() != this.getAlliance()){
                     ps.add(new Position(x1, y1));
                     break;
+                }else if(pieces[x1][y1].getAlliance() == this.getAlliance()){
+                    break;
+                }else{
+                    System.out.println("availablePosition failed at " + p + this.toChar());
                 }
             }
         }
         
-        return null;
+        return ps;
     }
 
     @Override

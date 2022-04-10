@@ -6,7 +6,7 @@ import chess.core.board.Board;
 import chess.core.board.Position;
 import chess.core.player.Player.Alliance;
 
-class Knight extends Piece{
+public class Knight extends Piece{
 
     public Knight(Position position, Alliance alliance) {
         super(position, Type.KNIGHT, alliance);

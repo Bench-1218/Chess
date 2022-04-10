@@ -2,8 +2,11 @@ package chess.core.board;
 
 import java.util.Set;
 
-import chess.core.board.pieces.Piece;
+import chess.core.board.pieces.*;
 import chess.core.player.Player.Alliance;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Board {
     public static final int HEIGHT = 8;
@@ -25,7 +28,70 @@ public class Board {
         round = 1;
     }
     private void resetBoard(){
-        // TODO
+        char[][] charBoard = new char[Board.WIDTH][Board.HEIGHT];
+        try {
+            Scanner sc = new Scanner(new File("data/ini.dat"));
+            
+            for(int y = 0; y < Board.HEIGHT; y++){
+                String s = sc.nextLine();
+                for(int x = 0; x < Board.WIDTH; x++){
+                    charBoard[x][y] = s.charAt(x);
+                }
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        this.board = new Piece[Board.WIDTH][Board.HEIGHT];
+        puts(charBoard);
+    }
+
+    private void put(Piece p){
+        // put p into a position 
+        // if there is a piece already, replace it
+        Position pos = p.getPosition();
+        int x = pos.getX();
+        int y = pos.getY();
+        board[x][y] = p;
+    }
+
+    private void put(char type, int x, int y){
+        Piece p = pieceGenerator(type, x , y);
+        if(p != null){
+            put(p);
+        }
+    }
+
+    private void puts(char[][] type){
+        for(int y = 0; y < Board.HEIGHT; y++){
+            for(int x = 0; x < Board.WIDTH; x++){
+                put(type[x][y], x, y);
+            }
+        }
+    }
+
+    private Piece pieceGenerator(char type, int x, int y){
+        Piece.Type t = Piece.char2Type(type);
+        Alliance alli = Piece.char2Alliance(type);
+        if(t == null) return null;
+        switch(t){
+            case BISHOP:
+                return new Bishop(new Position(x, y), alli);
+            case KING:
+                return new King(new Position(x,y), alli);
+            case KNIGHT:
+                return new Knight(new Position(x,y), alli);
+            case PAWN:
+                return new Pawn(new Position(x,y), alli);
+            case QUEEN:
+                return new Queen(new Position(x,y), alli);
+            case ROOK:
+                return new Rook(new Position(x,y), alli);
+            default:
+                System.out.println("fail to generate piece");
+                return null;
+        }
     }
 
     public Board(){
@@ -44,7 +110,10 @@ public class Board {
         char[][] charBoard = new char[Board.HEIGHT][Board.WIDTH];
         for(int y = 0; y < Board.HEIGHT; y++){
             for(int x = 0; x < Board.WIDTH; x++){
-                charBoard[x][y] = board[x][y].toChar();
+                if(board[x][y] != null)
+                    charBoard[x][y] = board[x][y].toChar();
+                else
+                    charBoard[x][y] = 'x';
             }
         }
         return charBoard;
@@ -129,7 +198,7 @@ public class Board {
         char[][] charBoard = this.getCharBoard();
         for(int y = 0; y < Board.HEIGHT; y++){
             for(int x = 0; x < Board.WIDTH; x++){
-                System.out.print(charBoard[x][y]==0 ? charBoard[x][y] : ' ');
+                System.out.print(charBoard[x][y]);
             }
             System.out.println();
         }

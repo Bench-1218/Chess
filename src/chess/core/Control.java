@@ -7,6 +7,7 @@ public class Control {
     private static Board board = new Board();
 
     public static char[][] getCharBoard(){
+        // x means no piece on the grid
         // BKNPQR and bknpqr are abbreviations. Notice: N indicates Knight and K indicated King
         // the uppercase means WHITE and the lowercase means BLACK
         return board.getCharBoard();

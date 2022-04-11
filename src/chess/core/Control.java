@@ -1,10 +1,62 @@
 package chess.core;
 
 import chess.core.board.Board;
+import chess.core.network.Client;
+import chess.core.network.Server;
 import chess.core.player.ai.AI;
 
 public class Control {
     private static Board board = new Board();
+    private static Server server;
+    private static Client client;
+    private static final Control control = new Control();
+
+    private Control(){}
+
+    public static Control getControl(){ // singletonization
+        return control;
+    }
+
+    public static void createServer(int port){
+        // create a Server bounded to a spesific port
+        server = new Server(port);
+    }
+    public static void createServer(){
+        // create a default Server
+        server = new Server(8088);
+    }
+    
+    public static void closeServer(){
+        server.close();
+    }
+
+    public static void connectToServer(String ip, int port){
+        // connect to Server with ip and port
+        client = new Client(ip, port);
+    }
+    public static void connectToServer(){
+        // connect to the default Server
+        client = new Client("localhost", 8088);
+    }
+
+    public static void saveGame(String filePath, int leftTime){
+        // pass leftTime to save how much time left for this turn
+        // if this file has exited, it will be covered by the new file
+        board.saveGame(filePath, leftTime);
+    }
+    public static void saveGame(String filePath){
+        // saveGame default version
+        board.saveGame(filePath, 30);
+    }
+
+    public static boolean loadGame(String filePath){ 
+        // please ensure that the file exists
+        return board.loadGame(filePath);
+    }
+
+    public static int getLeftTime(){
+        return board.getStatus().getLastLeftTime();
+    }
 
     public static char[][] getCharBoard(){
         // x means no piece on the grid

@@ -21,11 +21,18 @@ public class Debug {
     }
 
     public void rich(){
+        // WASD to move the curser
+        // J to select a chess. press again to determine its destination
+        // 3 to saveGame
+        // 4 to loadGame
         new KeyListener();
     }
 
     public void poor(){
         // without UI
+        // 0: display the board
+        // 1 x1 y1: display availablePosition for the chess at (x1, y1)
+        // 2 x1 y1 x2 y2: move chess(x1, y1) to chess(x2, y2)
         Scanner sc = new Scanner(System.in);
         while(true){
             int code = sc.nextInt();
@@ -138,6 +145,7 @@ public class Debug {
     }
 
     class KeyListener extends Frame{
+        // see rich
         private int x = 0;
         private int y = 0;
         private boolean select;
@@ -175,7 +183,7 @@ public class Debug {
                                 printBoard(x, y);
                             }
                             break;
-                        case 74:
+                        case 74: // J
                             if(!select){
                                 select = true;
                                 x1 = x;
@@ -186,6 +194,17 @@ public class Debug {
                                 board.movePiece(x1, y1, x, y);
                                 printBoard(x, y);
                             }
+                            break;
+                        case 51: // 3
+                            board.saveGame("C:/myFolder/codes/java/game1.dat", 18);
+                            System.out.println("save");
+                            break;
+                        case 52: // 4
+                            board.loadGame("C:/myFolder/codes/java/game1.dat");
+                            System.out.println("load");
+                            printBoard(x, y);
+                            break;
+
                     }
                 }
             });

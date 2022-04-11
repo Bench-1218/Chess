@@ -3,6 +3,7 @@ package chess.core.board;
 import java.util.Set;
 
 import chess.core.pieces.*;
+import chess.core.pieces.Piece.Type;
 import chess.core.player.Player.Alliance;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,17 +16,15 @@ public class Board {
     private boolean whiteKingExist;
     private boolean blackKingExist;
     private Piece[][] board;
-    private Steps steps;
+    private Status status;
     private int round;
 
-    private void resetSteps(){
-        steps = new Steps();
-    }
     private void resetStatus(){
         whiteKingExist = true;
         blackKingExist = true;
         turn = Alliance.WHITE;
         round = 1;
+        status = new Status();
     }
     private void resetBoard(){
         char[][] charBoard = new char[Board.WIDTH][Board.HEIGHT];
@@ -45,6 +44,15 @@ public class Board {
 
         this.board = new Piece[Board.WIDTH][Board.HEIGHT];
         puts(charBoard);
+    }
+
+    public void saveGame(String path, int leftTime){
+        this.status.saveStatus(path, leftTime);
+    }
+
+    public boolean loadGame(String path){
+        this.reset();
+        return this.status.loadStatus(path, this);
     }
 
     private void put(Piece p){
@@ -78,7 +86,6 @@ public class Board {
     public void reset(){
         resetStatus();
         resetBoard();
-        resetSteps();
     }
 
     public char[][] getCharBoard() {
@@ -98,6 +105,10 @@ public class Board {
 
     public Piece[][] getBoard(){
         return this.board;
+    }
+
+    public Status getStatus(){
+        return this.status;
     }
 
     public int[][] getAvailablePositions(int x, int y){
@@ -150,13 +161,29 @@ public class Board {
         // alliance try to move the piece in (x1, y1) to (x2, y2)
         // if the operation is valid, return true; otherwise return false
         if(!isAvailable(x1, y1, x2, y2)) return false;
-        if(board[x2][y2] == null || board[x2][y2].getAlliance() != board[x1][y1].getAlliance()){
-            board[x1][y1].move(x2, y2, this);
-            nextTurn();
-        }else{
-            System.out.printf("something wrong happened at movePiece(%d, %d, %d, %d)\n",x1, y1, x1, y2);
+        // we suppose that isAvailable goes well
+        // then (x2, y2) is either an enermy or null
+        if(board[x2][y2] != null && board[x2][y2].getType() == Type.KING){
+            if(board[x2][y2].getAlliance() == Alliance.BLACK){
+                this.blackKingExist = false;
+            }else{
+                this.whiteKingExist = false;
+            }
         }
+        board[x1][y1].move(x2, y2, this);
+        status.add(new Move(x1, y1, x2, y2, board[x2][y2].getType()));
+        nextTurn();
         return true;
+    }
+
+    public boolean movePiece(Move m){
+        Position p1 = m.getP1();
+        Position p2 = m.getP2();
+        int x1 = p1.getX();
+        int y1 = p1.getY();
+        int x2 = p2.getX();
+        int y2 = p2.getY();
+        return movePiece(x1, y1, x2, y2);
     }
 
     public static boolean strongNear(int x1, int y1, int x2, int y2){

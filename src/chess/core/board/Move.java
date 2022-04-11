@@ -1,5 +1,6 @@
 package chess.core.board;
 
+import chess.core.pieces.Piece;
 import chess.core.pieces.Piece.Type;
 
 public class Move {
@@ -9,6 +10,23 @@ public class Move {
         this.p1 = p1;
         this.p2 = p2;
         this.type = type;
+    }
+    public Move(int x1, int y1, int x2, int y2, Type type){
+        this.p1 = new Position(x1, y1);
+        this.p2 = new Position(x2, y2);
+        this.type = type;
+    }
+    public Move(String s){
+        // the String is expected to be like "(x1, y1) (x2, y2) type"
+        String[] ss = s.split(", "); // ss is expected to be like {"(x1", "y1) (x2", "y2) type"}
+        int x1 = Integer.parseInt(ss[0].substring(1));
+        int y1 = Integer.parseInt(ss[1].substring(0, ss[1].indexOf(")")));
+        int x2 = Integer.parseInt(ss[1].substring(ss[1].indexOf("(") + 1));
+        int y2 = Integer.parseInt(ss[2].substring(0, ss[2].indexOf(")")));
+        char t = ss[2].charAt(ss[2].length() - 1);
+        this.p1 = new Position(x1, y1);
+        this.p2 = new Position(x2, y2);
+        this.type = Piece.char2Type(t);
     }
     public Position getP1() {
         return p1;

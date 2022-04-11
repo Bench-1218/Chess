@@ -35,14 +35,10 @@ public class Pawn extends Piece{
         Piece[][] pieces = board.getBoard();
 
         if(this.getAlliance() == Alliance.BLACK){
-            if(!Board.isOutOfBound(x, y+1)){
-                if(pieces[x][y+1] == null){
-                    ps.add(new Position(x, y+1));
-                    if(!first && !Board.isOutOfBound(x, y+2) && (pieces[x][y+2]==null || pieces[x][y+2].getAlliance() == Alliance.WHITE)){
-                        ps.add(new Position(x, y+2));
-                    }
-                } else if(pieces[x][y+1].getAlliance() == Alliance.WHITE){
-                    ps.add(new Position(x, y+1));
+            if(!Board.isOutOfBound(x, y+1) && pieces[x][y+1] == null){
+                ps.add(new Position(x, y+1));
+                if(!first && !Board.isOutOfBound(x, y+2) && (pieces[x][y+2]==null || pieces[x][y+2].getAlliance() == Alliance.WHITE)){
+                    ps.add(new Position(x, y+2));
                 }
             }
 
@@ -73,14 +69,10 @@ public class Pawn extends Piece{
             
 
         }else{
-            if(!Board.isOutOfBound(x, y-1)){
-                if(pieces[x][y-1] == null){
-                    ps.add(new Position(x, y-1));
-                    if(!first && !Board.isOutOfBound(x, y-2) && (pieces[x][y-2]==null || pieces[x][y-2].getAlliance() == Alliance.BLACK)){
-                        ps.add(new Position(x, y-2));
-                    }
-                } else if(pieces[x][y-1].getAlliance() == Alliance.BLACK){
-                    ps.add(new Position(x, y-1));
+            if(!Board.isOutOfBound(x, y-1) && pieces[x][y-1] == null){
+                ps.add(new Position(x, y-1));
+                if(!first && !Board.isOutOfBound(x, y-2) && (pieces[x][y-2]==null || pieces[x][y-2].getAlliance() == Alliance.BLACK)){
+                    ps.add(new Position(x, y-2));
                 }
             }
 

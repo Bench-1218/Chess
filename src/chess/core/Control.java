@@ -18,28 +18,33 @@ public class Control {
         return control;
     }
 
+    // MULTIPLAYER MODULE
+    @Deprecated
     public static void createServer(int port){
         // create a Server bounded to a spesific port
         server = new Server(port);
     }
+    @Deprecated
     public static void createServer(){
         // create a default Server
         server = new Server(8088);
     }
-    
+    @Deprecated
     public static void closeServer(){
         server.close();
     }
-
+    @Deprecated
     public static void connectToServer(String ip, int port){
         // connect to Server with ip and port
         client = new Client(ip, port);
     }
+    @Deprecated
     public static void connectToServer(){
         // connect to the default Server
         client = new Client("localhost", 8088);
     }
 
+    // SAVE AND LOAD MODULE
     public static void saveGame(String filePath, int leftTime){
         // pass leftTime to save how much time left for this turn
         // if this file has exited, it will be covered by the new file
@@ -59,6 +64,7 @@ public class Control {
         return board.getStatus().getLastLeftTime();
     }
 
+    // BOARD OPERATIONS
     public static char[][] getCharBoard(){
         // x means no piece on the grid
         // BKNPQR and bknpqr are abbreviations. Notice: N indicates Knight and K indicated King
@@ -90,16 +96,6 @@ public class Control {
         // output "N" to represent that nothing happens
         return board.ifWin();
     }
-    public static int[] nextStepAI(int algorithm, int time){
-        // algorithm 0: random
-        //           1: AlphaBeta
-        // time: in terms of seconds
-        return AI.nextStepAI(algorithm, time, board);
-    }
-    public static void restart(){
-        // restart the game
-        board.reset();
-    }
     public static char getTurn(){
         // If it is turn for white, then output 'W'
         // If it is turn for black, then output 'B'
@@ -126,5 +122,17 @@ public class Control {
     public static boolean isInCheck(char alliance){
         // alliance can be 'W'(White) or 'B'(Black) to check if the player is in check
         return board.isInCheck(alliance);
+    }
+
+    // AI MODULE
+    public static int[] nextStepAI(int algorithm, int time){
+        // algorithm 0: random
+        //           1: AlphaBeta
+        // time: in terms of seconds
+        return AI.nextStepAI(algorithm, time, board);
+    }
+    public static void restart(){
+        // restart the game
+        board.reset();
     }
 }

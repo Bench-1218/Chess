@@ -4,9 +4,11 @@ import java.util.Set;
 
 import chess.core.pieces.*;
 import chess.core.pieces.Piece.Type;
+import chess.core.player.Player;
 import chess.core.player.Player.Alliance;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Board {
@@ -18,6 +20,8 @@ public class Board {
     private Piece[][] board;
     private Status status;
     private int round;
+    private Player[] opponents;
+    private Set<String> watcher;
 
     private void resetStatus(){
         whiteKingExist = true;
@@ -43,6 +47,8 @@ public class Board {
         }
 
         this.board = new Piece[Board.WIDTH][Board.HEIGHT];
+        this.opponents = new Player[2];
+        this.watcher = new HashSet<>();
         puts(charBoard);
     }
 

@@ -9,4 +9,5 @@ public interface Player {
             else return 'B';
         }
     }
+    
 }

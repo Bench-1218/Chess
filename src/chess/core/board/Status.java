@@ -23,15 +23,19 @@ public class Status extends ArrayList<Move>{
 
     public boolean loadStatus(String path, Board board){
         // return whether load successfully
+        BufferedReader in;
         try {
             File file = new File(path);
-            BufferedReader in = new BufferedReader(new FileReader(file));
+            in = new BufferedReader(new FileReader(file));
             this.setLastLeftTime(Integer.parseInt(in.readLine()));
 
             String s;
             while((s = in.readLine()) != null){
                 Move m = new Move(s);
-                if(m.getType() == null) return false;
+                if(m.getType() == null) {
+                    in.close();
+                    return false;
+                }
                 this.add(m);
                 board.movePiece(m);
             }
@@ -39,6 +43,7 @@ public class Status extends ArrayList<Move>{
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally{
         }
         return false;
 

@@ -1,11 +1,16 @@
 package chess.debug;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.Frame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import chess.core.board.Board;
+import chess.core.board.Move;
+import chess.core.board.Position;
+import chess.core.player.ai.AI;
+import chess.core.player.ai.AlphaBeta;
 
 public class Debug {
     Board board = new Board();
@@ -26,6 +31,8 @@ public class Debug {
         // R to reset
         // 3 to saveGame
         // 4 to loadGame
+        // 5 RandAI
+        // 6 AlphaBeta
         new KeyListener();
     }
 
@@ -206,6 +213,20 @@ public class Debug {
                             break;
                         case 52: // 4
                             board.loadGame("C:/myFolder/codes/java/game1.dat");
+                            printBoard(x, y);
+                            break;
+                        case 53: // 5
+                            int[] pos = AI.nextStepAI(0, 3, board);
+                            board.movePiece(pos[0], pos[1], pos[2], pos[3]);
+                            printBoard(x, y);
+                            break;
+                        case 54: // 6
+                            int[] a = AlphaBeta.nextStep(3, board);
+                            board.movePiece(a[0], a[1], a[2], a[3]);
+                            printBoard(x, y);
+                            break;
+                        case 66: // B
+                            board.lastStep();
                             printBoard(x, y);
                             break;
                     }

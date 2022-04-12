@@ -4,11 +4,10 @@ import java.util.Set;
 
 import chess.core.pieces.*;
 import chess.core.pieces.Piece.Type;
-import chess.core.player.Player;
 import chess.core.player.Player.Alliance;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Board {
@@ -20,8 +19,6 @@ public class Board {
     private Piece[][] board;
     private Status status;
     private int round;
-    private Player[] opponents;
-    private Set<String> watcher;
 
     private void resetStatus(){
         whiteKingExist = true;
@@ -47,8 +44,6 @@ public class Board {
         }
 
         this.board = new Piece[Board.WIDTH][Board.HEIGHT];
-        this.opponents = new Player[2];
-        this.watcher = new HashSet<>();
         puts(charBoard);
     }
 
@@ -63,6 +58,17 @@ public class Board {
             this.reset();
             return false;
         }else return true;
+    }
+
+    public boolean lastStep(){
+        if(status.size() == 0){
+            System.out.println("this has been the original situation");
+            return true;
+        }
+        status.remove(status.size() - 1);
+        Status sLast = new Status(status);
+        this.reset();
+        return this.status.loadStatus(sLast, this);
     }
 
     private void put(Piece p){
@@ -128,7 +134,7 @@ public class Board {
             return null;
         }
         if(board[x][y] == null) {
-            System.out.printf("no piece at (%d, %d)\n", x, y);
+            // System.out.printf("no piece at (%d, %d)\n", x, y);
             return null;
         }
         Set<Position> ps = board[x][y].availablePosition(this);
@@ -141,6 +147,21 @@ public class Board {
             i++;
         }
         return psInt;
+    }
+
+    public ArrayList<Move> getAvailableMoves(){
+        ArrayList<Move> moves = new ArrayList<>();
+        for(int y = 0; y < 8; y++){
+            for(int x = 0; x < 8; x++){
+                if(board[x][y] != null && board[x][y].getAlliance() != this.turn) continue;
+                int[][] destinations = getAvailablePositions(x, y);
+                if(destinations == null) continue;
+                for(int i = 0; i < destinations.length; i++){
+                    moves.add(new Move(x, y, destinations[i][0], destinations[i][1], Type.KING));
+                }
+            }
+        }
+        return moves;
     }
 
     public boolean isAvailable(int x1, int y1, int x2, int y2){
@@ -333,9 +354,7 @@ public class Board {
         }
         return isDanger;
     }
-
     private boolean isInDanger(Position p){
         return isInDanger(p.getX(), p.getY());
     }
-
 }

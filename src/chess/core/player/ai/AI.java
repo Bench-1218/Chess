@@ -5,12 +5,12 @@ import chess.core.player.Player;
 
 public class AI implements Player{
 
-    public static int[] nextStepAI(int algorithm, int time, Board board){
+    public static int[] nextStepAI(int algorithm, int deep, Board board){
         switch(algorithm){
             case 0:
-            return Random.nextStep(time,board);
+            return RandAI.nextStep(deep,board);
             case 1:
-            return AlphaBeta.nextStep(time, board);
+            return AlphaBeta.nextStep(deep, board);
             default:
             System.out.println("algorithem should be a number between 0 and 1");
             return null;

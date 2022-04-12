@@ -77,8 +77,8 @@ public class King extends Piece{
                 }
             }
         }else flag = false;
-        System.out.println("safeRoute");
-        System.out.println(flag); // debug
+        // System.out.println("safeRoute");
+        // System.out.println(flag); // debug
         return flag;
     }
 

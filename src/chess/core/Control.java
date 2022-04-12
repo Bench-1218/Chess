@@ -8,9 +8,11 @@ import chess.core.player.ai.AI;
 
 public class Control {
     private static Board board = new Board();
-    private static Server server;
-    private static Client client;
     private static final Control control = new Control();
+    @Deprecated
+    private static Server server;
+    @Deprecated
+    private static Client client;
 
     private Control(){}
 
@@ -59,12 +61,16 @@ public class Control {
         // please ensure that the file exists
         return board.loadGame(filePath);
     }
-
     public static int getLeftTime(){
+        // how much time left for you in the last game
+        // use after loadGame
         return board.getStatus().getLastLeftTime();
     }
 
-    // BOARD OPERATIONS
+    // BOARD CONTROL
+    public static void lastStep(){
+        board.lastStep();
+    }
     public static char[][] getCharBoard(){
         // x means no piece on the grid
         // BKNPQR and bknpqr are abbreviations. Notice: N indicates Knight and K indicated King
@@ -125,11 +131,12 @@ public class Control {
     }
 
     // AI MODULE
-    public static int[] nextStepAI(int algorithm, int time){
+    public static int[] nextStepAI(int algorithm, int depth){
         // algorithm 0: random
         //           1: AlphaBeta
-        // time: in terms of seconds
-        return AI.nextStepAI(algorithm, time, board);
+        // for AlphaBeta, the deeper the stronger (if using random, input any integer)
+        // output 4 numbers: {x1, y1, x2, y2} meaning that move chess(x1,y1) to (x2,y2)
+        return AI.nextStepAI(algorithm, depth, board);
     }
     public static void restart(){
         // restart the game

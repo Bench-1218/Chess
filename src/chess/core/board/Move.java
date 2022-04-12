@@ -4,8 +4,9 @@ import chess.core.pieces.Piece;
 import chess.core.pieces.Piece.Type;
 
 public class Move {
-    private Position p1, p2; // p1 to p2
+    @Deprecated
     private Type type;
+    private Position p1, p2; // p1 to p2
     public Move(Position p1, Position p2, Type type) {
         this.p1 = p1;
         this.p2 = p2;

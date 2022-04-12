@@ -10,6 +10,17 @@ public class Status extends ArrayList<Move>{
 
     private int lastLeftTime = 30;
 
+    public Status(){
+        super();
+    }
+
+    public Status(final Status s){
+        super();
+        for(Move m : s){
+            this.add(m);
+        }
+    }
+
     @Override
     public synchronized String toString() {
         StringBuilder sb = new StringBuilder();
@@ -49,6 +60,14 @@ public class Status extends ArrayList<Move>{
 
     }
 
+    public boolean loadStatus(Status sNew, Board board){
+        // return whether load successfully
+        for(Move m : sNew){
+            if(!board.movePiece(m)) return false;
+        }
+        return true;
+    }
+
     public void saveStatus(String path, int leftTime){
         try {
             File file = new File(path);
@@ -72,7 +91,6 @@ public class Status extends ArrayList<Move>{
     @Override
     public boolean add(Move m){
         if(super.add(m)){
-            // TODO check if the step is special
         }else return false;
         return true;
     }

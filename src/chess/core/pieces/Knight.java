@@ -52,4 +52,9 @@ public class Knight extends Piece{
         
     }
 
+    @Override
+    public Set<Position> attackPosition(Board board) {
+        return availablePosition(board);
+    }
+
 }

@@ -11,8 +11,6 @@ public class AI implements Player{
             return Random.nextStep(time,board);
             case 1:
             return AlphaBeta.nextStep(time, board);
-            case 2:
-            return MonteCarloTree.nextStep(time, board);
             default:
             System.out.println("algorithem should be a number between 0 and 1");
             return null;

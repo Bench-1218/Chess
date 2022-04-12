@@ -52,7 +52,11 @@ public class Board {
 
     public boolean loadGame(String path){
         this.reset();
-        return this.status.loadStatus(path, this);
+        if(!this.status.loadStatus(path, this)){
+            System.out.println("Load failed");
+            this.reset();
+            return false;
+        }else return true;
     }
 
     private void put(Piece p){
@@ -256,6 +260,76 @@ public class Board {
     }
     public void setPiece(int x, int y, char type) {
         board[x][y] = Piece.pieceGenerator(type, x, y);
+    }
+
+    public boolean isInCheck(char alliance){
+        // alliance can be 'W' or 'B'
+        if(alliance == 'W'){
+            Piece p = null;
+            out:
+            for(int y = 0; y < Board.HEIGHT; y++){
+                for(int x = 0; x < Board.WIDTH; x++){
+                    if(board[x][y] != null && board[x][y].toChar() == 'K'){
+                        p = board[x][y];
+                        break out;
+                    }
+                }
+            }
+            if(p == null){
+                System.out.println("Error in isInCheck: no White King");
+                return false;
+            }else{
+                return isInDanger(p.getPosition());
+            }
+        }else if(alliance == 'B'){
+            Piece p = null;
+            out:
+            for(int y = 0; y < Board.HEIGHT; y++){
+                for(int x = 0; x < Board.WIDTH; x++){
+                    if(board[x][y] != null && board[x][y].toChar() == 'k'){
+                        p = board[x][y];
+                        break out;
+                    }
+                }
+            }
+            if(p == null){
+                System.out.println("Error in isInCheck: no Black King");
+                return false;
+            }else{
+                return isInDanger(p.getPosition());
+            }
+        }else{
+            System.out.println("Error in isInCheck: alliance should be 'W' or 'B' instead of " + alliance);
+            return false;
+        }
+    }
+
+    public boolean isInDanger(int x, int y){
+        return isInDanger(x, y, board[x][y].getAlliance());
+    }
+
+    public boolean isInDanger(int x1, int y1, Alliance alli){
+        Position pos = new Position(x1, y1);
+        boolean isDanger = false;
+        out:
+        for(int y = 0; y < Board.HEIGHT; y++){
+            for(int x = 0; x < Board.WIDTH; x++){
+                if(board[x][y] != null && board[x][y].getAlliance() != alli && (x != x1 || y != y1)){
+                    Set<Position> poss = board[x][y].attackPosition(this);
+                    for(Position p1 : poss){
+                        if(pos.equals(p1)) {
+                            isDanger = true;
+                            break out;
+                        }
+                    }
+                }
+            }
+        }
+        return isDanger;
+    }
+
+    private boolean isInDanger(Position p){
+        return isInDanger(p.getX(), p.getY());
     }
 
 }

@@ -55,5 +55,10 @@ public class Queen extends Piece{
     public void nextTurn() {
         
     }
+
+    @Override
+    public Set<Position> attackPosition(Board board) {
+        return availablePosition(board);
+    }
     
 }

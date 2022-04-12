@@ -10,8 +10,20 @@ import chess.core.player.Player.Alliance;
 public class Rook extends Piece{
     private final int[][] DIRECTION = {{0,1},{0,-1},{1,0},{-1,0}};
 
+    private boolean first = false; // whether King has taken the first step
+
     public Rook(Position position, Alliance alliance) {
         super(position, Type.ROOK, alliance);
+    }
+
+    public boolean getFirst(){
+        return first;
+    }
+
+    @Override
+    public void move(int x2, int y2, Board board) {
+        super.move(x2, y2, board);
+        first = true;
     }
 
     @Override
@@ -53,7 +65,12 @@ public class Rook extends Piece{
 
     @Override
     public void nextTurn() {
-        
+
+    }
+
+    @Override
+    public Set<Position> attackPosition(Board board) {
+        return availablePosition(board);
     }
     
 }

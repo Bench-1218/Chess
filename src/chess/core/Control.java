@@ -3,6 +3,7 @@ package chess.core;
 import chess.core.board.Board;
 import chess.core.network.Client;
 import chess.core.network.Server;
+import chess.core.pieces.King;
 import chess.core.player.ai.AI;
 
 public class Control {
@@ -92,7 +93,6 @@ public class Control {
     public static int[] nextStepAI(int algorithm, int time){
         // algorithm 0: random
         //           1: AlphaBeta
-        //           2: MonteCarloTree
         // time: in terms of seconds
         return AI.nextStepAI(algorithm, time, board);
     }
@@ -116,5 +116,15 @@ public class Control {
         // in another word input 'x' means remove the chess on (x, y)
         // this function is meant to provide alternatives for Promotion of Pawn
         board.setPiece(x, y, type);
+    }
+    public static void setCastlingRule(boolean noPieceBetween, boolean notInCheck,
+                                        boolean safeRoute, boolean neverMoved){
+        // if enable the corresponding restrictions (default: all enabled)
+        // note: SafeRoute means the king does not pass through or land on any square attacked by an enemy piece
+        King.setCastlingRule(noPieceBetween, notInCheck, safeRoute, neverMoved);
+    }
+    public static boolean isInCheck(char alliance){
+        // alliance can be 'W'(White) or 'B'(Black) to check if the player is in check
+        return board.isInCheck(alliance);
     }
 }

@@ -23,6 +23,7 @@ public class Debug {
     public void rich(){
         // WASD to move the curser
         // J to select a chess. press again to determine its destination
+        // R to reset
         // 3 to saveGame
         // 4 to loadGame
         new KeyListener();
@@ -195,16 +196,18 @@ public class Debug {
                                 printBoard(x, y);
                             }
                             break;
+                        case 82: // R
+                            board.reset();
+                            printBoard(x, y);
+                            break;
                         case 51: // 3
                             board.saveGame("C:/myFolder/codes/java/game1.dat", 18);
                             System.out.println("save");
                             break;
                         case 52: // 4
                             board.loadGame("C:/myFolder/codes/java/game1.dat");
-                            System.out.println("load");
                             printBoard(x, y);
                             break;
-
                     }
                 }
             });

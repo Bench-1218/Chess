@@ -31,6 +31,7 @@ public class Status extends ArrayList<Move>{
             String s;
             while((s = in.readLine()) != null){
                 Move m = new Move(s);
+                if(m.getType() == null) return false;
                 this.add(m);
                 board.movePiece(m);
             }

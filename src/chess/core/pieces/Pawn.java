@@ -162,5 +162,52 @@ public class Pawn extends Piece{
         
         super.move(x2, y2, board);
     }
+
+    @Override
+    public Set<Position> attackPosition(Board board) {
+        Set<Position> ps = new HashSet<>();
+        Position pos = this.getPosition();
+        int x = pos.getX();
+        int y = pos.getY();
+        Piece[][] pieces = board.getBoard();
+
+        if(this.getAlliance() == Alliance.BLACK){
+            if(!Board.isOutOfBound(x+1,y+1) && pieces[x+1][y+1] != null && pieces[x+1][y+1].getAlliance() == Alliance.WHITE){
+                ps.add(new Position(x+1, y+1));
+            }
+            if(!Board.isOutOfBound(x-1,y+1) && pieces[x-1][y+1] != null && pieces[x-1][y+1].getAlliance() == Alliance.WHITE){
+                ps.add(new Position(x-1, y+1));
+            }
+            if(!Board.isOutOfBound(x+1, y) && pieces[x+1][y] != null && pieces[x+1][y].getAlliance() == Alliance.WHITE &&
+                pieces[x+1][y].getType() == Type.PAWN && ((Pawn)pieces[x+1][y]).getFrenzy()){
+                Position newP = new Position(x+1, y);
+                ps.add(newP);
+            }
+            if(!Board.isOutOfBound(x-1,y) && pieces[x-1][y] != null && pieces[x-1][y].getAlliance() == Alliance.WHITE &&
+                pieces[x-1][y].getType() == Type.PAWN && ((Pawn)pieces[x-1][y]).getFrenzy()){
+                Position newP = new Position(x-1, y+1);
+                ps.add(newP);
+            }
+        }else{
+            if(!Board.isOutOfBound(x+1,y-1) && pieces[x+1][y-1] != null && pieces[x+1][y-1].getAlliance() == Alliance.BLACK){
+                ps.add(new Position(x+1, y-1));
+            }
+            if(!Board.isOutOfBound(x-1,y-1) && pieces[x-1][y-1] != null && pieces[x-1][y-1].getAlliance() == Alliance.BLACK){
+                ps.add(new Position(x-1, y-1));
+            }
+            if(!Board.isOutOfBound(x+1, y) && pieces[x+1][y] != null && pieces[x+1][y].getAlliance() == Alliance.BLACK &&
+                pieces[x+1][y].getType() == Type.PAWN && ((Pawn)pieces[x+1][y]).getFrenzy()){
+                Position newP = new Position(x+1, y-1);
+                ps.add(newP);
+            }
+            if(!Board.isOutOfBound(x-1,y) && pieces[x-1][y] != null && pieces[x-1][y].getAlliance() == Alliance.BLACK &&
+                pieces[x-1][y].getType() == Type.PAWN && ((Pawn)pieces[x-1][y]).getFrenzy()){
+                Position newP = new Position(x-1, y-1);
+                ps.add(newP);
+            }
+        }
+        
+        return ps;
+    }
     
 }

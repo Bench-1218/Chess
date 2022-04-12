@@ -8,6 +8,25 @@ import chess.core.board.Position;
 public abstract class Piece {
     public enum Type{
         BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK;
+        @Override
+        public String toString() {
+            switch(this.name()){
+                case "BISHOP":
+                    return "B";
+                case "KING":
+                    return "K";
+                case "KNIGHT":
+                    return "N";
+                case "PAWN":
+                    return "P";
+                case "QUEEN":
+                    return "Q";
+                case "ROOK":
+                    return "R";
+                default:
+                    return " ";
+            }
+        }
     }
     private Position position;
     private final Type type;
@@ -106,6 +125,7 @@ public abstract class Piece {
     @Override
     public abstract String toString();
     public abstract Set<Position> availablePosition(Board board);
+    public abstract Set<Position> attackPosition(Board board);
     public abstract char toChar();
     public abstract void nextTurn(); // this function is invoked at the end of every turn
 

@@ -106,20 +106,21 @@ public class AlphaBeta {
             isWhite = true;
             piece += 32;
         }
+        double ret = 0;
         if (piece == 'p'){
-            return 10 + (isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x]);
+            ret = 10 + (isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x]);
         }else if(piece =='r') {
-            return 50 + (isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x]);
+            ret = 50 + (isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x]);
         }else if(piece =='n') {
-            return 30 + knightEval[y][x];
+            ret = 30 + knightEval[y][x];
         }else if(piece =='b') {
-            return 30 + (isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x]);
+            ret = 30 + (isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x]);
         }else if(piece =='q') {
-            return 90 + evalQueen[y][x];
+            ret = 90 + evalQueen[y][x];
         }else if(piece =='k') {
-            return 900 + (isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x]);
+            ret = 900 + (isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x]);
         }
-        return 0;
+        return isWhite ? ret : -ret;
     }
 
     public static double evaluate(Board board){
@@ -145,7 +146,7 @@ public class AlphaBeta {
         if(depth == 0){
             return evaluate(board);
         }
-        double clf = Double.MIN_VALUE;
+        double clf = -Double.MAX_VALUE;
         for(Move m : board.getAvailableMoves()){
             board.movePiece(m);
             clf = Math.max(clf, minValue(board, alpha, beta, depth - 1));
@@ -177,15 +178,32 @@ public class AlphaBeta {
 
     public static int[] nextStep(int depth, Board board) {
         ArrayList<Move> moves = board.getAvailableMoves();
-        double max = Double.MIN_VALUE;
         Move chooseMove = null;
-        for(Move m : moves){
-            board.movePiece(m);
-            if(maxValue(board, Double.MIN_VALUE, Double.MAX_VALUE, depth - 1) > max){
-                chooseMove = m;
+        if(board.getTurn() == Alliance.WHITE){
+            double max = -Double.MAX_VALUE;
+            for(Move m : moves){
+                board.movePiece(m);
+                double t = minValue(board, max, Double.MAX_VALUE, depth - 1);
+                if(t > max){
+                    chooseMove = m;
+                    max = t;
+                }
+                board.lastStep();
             }
-            board.lastStep();
+        }else{
+            double min = Double.MAX_VALUE;
+            for(Move m : moves){
+                board.movePiece(m);
+                double t = maxValue(board, -Double.MAX_VALUE, min, depth - 1);
+                // System.out.print(m); System.out.println(" " + t);
+                if(t < min){
+                    chooseMove = m;
+                    min = t;
+                }
+                board.lastStep();
+            }
         }
+
         Position p1 = chooseMove.getP1();
         Position p2 = chooseMove.getP2();
         int[] ret = new int[4];
@@ -193,6 +211,7 @@ public class AlphaBeta {
         ret[1] = p1.getY();
         ret[2] = p2.getX();
         ret[3] = p2.getY();
+        // System.out.println("choose " + p1 + " to " + p2);
         return ret;
     }
 

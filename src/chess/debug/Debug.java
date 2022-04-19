@@ -225,6 +225,9 @@ public class Debug {
                             board.movePiece(a[0], a[1], a[2], a[3]);
                             printBoard(x, y);
                             break;
+                        case 55: // 7
+                            System.out.println(AlphaBeta.evaluate(board));
+                            break;
                         case 66: // B
                             board.lastStep();
                             printBoard(x, y);

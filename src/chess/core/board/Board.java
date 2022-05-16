@@ -31,7 +31,7 @@ public class Board {
         char[][] charBoard = new char[Board.WIDTH][Board.HEIGHT];
         try {
             Scanner sc = new Scanner(new File("data/ini.dat"));
-            
+
             for(int y = 0; y < Board.HEIGHT; y++){
                 String s = sc.nextLine();
                 for(int x = 0; x < Board.WIDTH; x++){
@@ -72,7 +72,7 @@ public class Board {
     }
 
     private void put(Piece p){
-        // put p into a position 
+        // put p into a position
         // if there is a piece already, replace it
         Position pos = p.getPosition();
         int x = pos.getX();
@@ -84,7 +84,7 @@ public class Board {
         Piece p = Piece.pieceGenerator(type, x , y);
         if(p != null){
             put(p);
-        }
+        }else this.board[x][y] = null;
     }
 
     private void puts(char[][] type){
@@ -98,7 +98,7 @@ public class Board {
     public Board(){
         reset();
     }
-    
+
     public void reset(){
         resetStatus();
         resetBoard();
@@ -222,7 +222,7 @@ public class Board {
         if(y1-y2==0 && (x1-x2==1 || x1-x2==-1)) return true;
         return false;
     }
-    
+
     public static boolean weakNear(int x1, int y1, int x2, int y2){
         if(x1==x2 && y1==y2) return false;
         if((x1-x2 >= -1 || x1-x2 <= 1) && (y1-y2 >= -1 || y1-y2 <= 1)) return true;
@@ -263,7 +263,18 @@ public class Board {
         }else{
             if(!whiteKingExist) return 'B';
         }
-        // TODO draw
+
+        boolean draw = true;
+        for(int x = 0; x < Board.WIDTH; x++){
+            for(int y = 0; y < Board.HEIGHT; y++){
+                if(board[x][y] != null && board[x][y].availablePosition(this) != null){
+                    draw = false;
+                }
+            }
+        }
+
+        if(draw) return 'D';
+
         return 'N';
     }
 
@@ -356,5 +367,54 @@ public class Board {
     }
     private boolean isInDanger(Position p){
         return isInDanger(p.getX(), p.getY());
+    }
+    public int loadFormatBoard(File f){
+        String name = f.getName();
+        int i = name.lastIndexOf(".");
+        if(!name.substring(i + 1).equals("txt")) return 104;
+        char[][] charBoard = new char[Board.HEIGHT][Board.WIDTH];
+        try{
+            Scanner sc = new Scanner(f);
+            for(int y = 0; y < Board.HEIGHT; y++){
+                String s = sc.nextLine();
+                if(s.length() > Board.HEIGHT){
+                    sc.close();
+                    return 101;
+                }
+                for(int x = 0; x < Board.WIDTH; x++){
+                    char c = s.charAt(x);
+                    if("BKNPQRbknpqr_".contains(Character.toString(c))){
+                        if(c > 'Z'){
+                            charBoard[x][y] = Character.toUpperCase(c);
+                        }else charBoard[x][y] = Character.toLowerCase(c);
+                        if(c == '_') charBoard[x][y] = 'x';
+                    }else{
+                        sc.close();
+                        return 102;
+                    }
+                }
+            }
+            String s = sc.nextLine();
+            if(s.length() > 1){
+                sc.close();
+                return 101;
+            }
+            if(s.equals("b")){
+                this.turn = Alliance.BLACK;
+            }else if(s.equals("w")){
+                this.turn = Alliance.WHITE;
+            }else{
+                sc.close();
+                return 103;
+            }
+            this.puts(charBoard);
+            this.round = 1;
+
+            sc.close();
+            return 0;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return 1;
     }
 }

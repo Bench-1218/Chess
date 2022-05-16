@@ -1,5 +1,7 @@
 package chess.core;
 
+import java.io.File;
+
 import chess.core.board.Board;
 import chess.core.network.Client;
 import chess.core.network.Server;
@@ -57,9 +59,14 @@ public class Control {
         board.saveGame(filePath, 30);
     }
 
-    public static boolean loadGame(String filePath){ 
+    public static boolean loadGame(String filePath){
         // please ensure that the file exists
         return board.loadGame(filePath);
+    }
+    public static int loadFormatBoard(File f){
+        // return 0 if successfully load the board
+        // return 101,102,103,104 for errors
+        return board.loadFormatBoard(f);
     }
     public static int getLeftTime(){
         // how much time left for you in the last game
@@ -80,7 +87,7 @@ public class Control {
     public static int[][] getAvailablePositions(int x, int y){
         // return n by 2 matrix or null
         // n: n available positions
-        // 2: coordinates of the position 
+        // 2: coordinates of the position
         return board.getAvailablePositions(x, y);
     }
     public static boolean isAvailable(int x1, int y1, int x2, int y2){
@@ -107,6 +114,11 @@ public class Control {
         // If it is turn for black, then output 'B'
         // If some problem is encountered, then output 'N'. Please contact with JAKE_XU when this happens.
         return board.getTurnChar();
+
+    }
+    public static void nextTurn(){
+        // nextTurn
+        board.nextTurn();
     }
     public static int getRound(){
         // return the number of round
@@ -120,7 +132,7 @@ public class Control {
         board.setPiece(x, y, type);
     }
     public static void setCastlingRule(boolean noPieceBetween, boolean notInCheck,
-                                        boolean safeRoute, boolean neverMoved){
+                                       boolean safeRoute, boolean neverMoved){
         // if enable the corresponding restrictions (default: all enabled)
         // note: SafeRoute means the king does not pass through or land on any square attacked by an enemy piece
         King.setCastlingRule(noPieceBetween, notInCheck, safeRoute, neverMoved);

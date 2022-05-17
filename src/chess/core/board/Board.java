@@ -72,7 +72,7 @@ public class Board {
     }
 
     private void put(Piece p){
-        // put p into a position
+        // put p into a position 
         // if there is a piece already, replace it
         Position pos = p.getPosition();
         int x = pos.getX();
@@ -272,7 +272,7 @@ public class Board {
                 }
             }
         }
-
+        
         if(draw) return 'D';
 
         return 'N';

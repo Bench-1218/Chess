@@ -87,7 +87,7 @@ public class Control {
     public static int[][] getAvailablePositions(int x, int y){
         // return n by 2 matrix or null
         // n: n available positions
-        // 2: coordinates of the position
+        // 2: coordinates of the position 
         return board.getAvailablePositions(x, y);
     }
     public static boolean isAvailable(int x1, int y1, int x2, int y2){

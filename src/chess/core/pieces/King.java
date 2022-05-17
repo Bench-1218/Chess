@@ -59,20 +59,24 @@ public class King extends Piece{
         if(x1 == x2){
             if(y1 < y2){
                 for(int y = y1 + 1; y <= y1 + 2; y++){
+                    if(y >= Board.HEIGHT) return false;
                     if(board.isInDanger(x1, y, this.getAlliance())) flag = false;
                 }
             }else{
                 for(int y = y1 - 1; y >= y1 - 2; y--){
+                    if(y < 0) return false;
                     if(board.isInDanger(x1, y, this.getAlliance())) flag = false;
                 }
             }
         }else if(y1 == y2){
             if(x1 < x2){
                 for(int x = x1 + 1; x <= x1 + 2; x++){
+                    if(x >= Board.WIDTH) return false;
                     if(board.isInDanger(x, y1, this.getAlliance())) flag = false;
                 }
             }else{
                 for(int x = x1 - 1; x >= x1 - 2; x--){
+                    if(x < 0) return false;
                     if(board.isInDanger(x, y1, this.getAlliance())) flag = false;
                 }
             }
@@ -109,6 +113,7 @@ public class King extends Piece{
                     p = pieces[x][y1];
                 }
             }
+            this.hasCastled = true;
             p.move(x1 + 1, y1, board);
         }else if(x2 - x1 == -2){
             Piece p = null;
@@ -117,6 +122,7 @@ public class King extends Piece{
                     p = pieces[x][y1];
                 }
             }
+            this.hasCastled = true;
             p.move(x1 - 1, y1, board);
         }else if(y2 - y1 == 2){
             Piece p = null;
@@ -125,6 +131,7 @@ public class King extends Piece{
                     p = pieces[x1][y];
                 }
             }
+            this.hasCastled = true;
             p.move(x1, y1 + 1, board);
         }else if(y2 - y1 == -2){
             Piece p = null;
@@ -133,6 +140,7 @@ public class King extends Piece{
                     p = pieces[x1][y];
                 }
             }
+            this.hasCastled = true;
             p.move(x1, y1 - 1, board);
         }
 

@@ -37,7 +37,7 @@ public class Pawn extends Piece{
         if(this.getAlliance() == Alliance.BLACK){
             if(!Board.isOutOfBound(x, y+1) && pieces[x][y+1] == null){
                 ps.add(new Position(x, y+1));
-                if(!first && !Board.isOutOfBound(x, y+2) && (pieces[x][y+2]==null || pieces[x][y+2].getAlliance() == Alliance.WHITE)){
+                if(!first && !Board.isOutOfBound(x, y+2) && (pieces[x][y+2]==null)){
                     ps.add(new Position(x, y+2));
                 }
             }
@@ -71,7 +71,7 @@ public class Pawn extends Piece{
         }else{
             if(!Board.isOutOfBound(x, y-1) && pieces[x][y-1] == null){
                 ps.add(new Position(x, y-1));
-                if(!first && !Board.isOutOfBound(x, y-2) && (pieces[x][y-2]==null || pieces[x][y-2].getAlliance() == Alliance.BLACK)){
+                if(!first && !Board.isOutOfBound(x, y-2) && (pieces[x][y-2]==null)){
                     ps.add(new Position(x, y-2));
                 }
             }

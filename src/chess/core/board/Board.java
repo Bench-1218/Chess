@@ -5,6 +5,7 @@ import java.util.Set;
 import chess.core.pieces.*;
 import chess.core.pieces.Piece.Type;
 import chess.core.player.Player.Alliance;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -181,7 +182,8 @@ public class Board {
                 if(p.equals(p2)) contain = true;
             }
             if(!contain){
-                System.out.println("the piece cannot go to " + p2);
+                System.out.println("the piece " + p1 + " cannot go to " + p2);
+                System.out.println(this.board[x1][y1]);
                 valid = false;
             }
         }

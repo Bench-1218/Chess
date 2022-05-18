@@ -59,20 +59,24 @@ public class King extends Piece{
         if(x1 == x2){
             if(y1 < y2){
                 for(int y = y1 + 1; y <= y1 + 2; y++){
+                    if(y > Board.HEIGHT - 1) return false;
                     if(board.isInDanger(x1, y, this.getAlliance())) flag = false;
                 }
             }else{
                 for(int y = y1 - 1; y >= y1 - 2; y--){
+                    if(y < 0) return false;
                     if(board.isInDanger(x1, y, this.getAlliance())) flag = false;
                 }
             }
         }else if(y1 == y2){
             if(x1 < x2){
                 for(int x = x1 + 1; x <= x1 + 2; x++){
+                    if(x > Board.WIDTH - 1) return false;
                     if(board.isInDanger(x, y1, this.getAlliance())) flag = false;
                 }
             }else{
                 for(int x = x1 - 1; x >= x1 - 2; x--){
+                    if(x < 0) return false;
                     if(board.isInDanger(x, y1, this.getAlliance())) flag = false;
                 }
             }

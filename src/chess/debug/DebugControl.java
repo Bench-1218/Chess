@@ -1,16 +1,13 @@
 package chess.debug;
 
-import java.util.Scanner;
 import java.awt.Frame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import chess.core.Control;
 import chess.core.board.Board;
-import chess.core.player.ai.AI;
-import chess.core.player.ai.AlphaBeta;
 
-public class Debug {
-    Board board = new Board();
+public class DebugControl {
     public static final String WHITE_FG =  "\u001B[38;5;255m";
     public static final String BLACK_FG = "\u001B[38;5;232m";
     public static final String WHITE_BG = "\u001B[48;5;203m";
@@ -33,36 +30,13 @@ public class Debug {
         new KeyListener();
     }
 
-    public void poor(){
-        // without UI
-        // 0: display the board
-        // 1 x1 y1: display availablePosition for the chess at (x1, y1)
-        // 2 x1 y1 x2 y2: move chess(x1, y1) to chess(x2, y2)
-        Scanner sc = new Scanner(System.in);
-        while(true){
-            int code = sc.nextInt();
-            if(code == 0) printBoard();
-            else if(code == 1){
-                int x = sc.nextInt();
-                int y = sc.nextInt();
-                printAvailablePositions(x, y);
-            }else if(code == 2){
-                board.movePiece(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt());
-                printBoard();
-                System.out.println();
-            }else break;
-        }
-        sc.close();
-    }
-
-
-    public void printBoard() {
+    public static void printBoard() {
         printBoard(-1, -1);
     }
 
-    public void printBoard(int x1, int y1){
-        char[][] charBoard = board.getCharBoard();
-        System.out.printf("round %d: %s\n", board.getRound(), board.getTurn());
+    public static void printBoard(int x1, int y1){
+        char[][] charBoard = Control.getCharBoard();
+        System.out.printf("round %d: %s\n", Control.getRound(), Control.getTurn());
         for(int y = 0; y < Board.HEIGHT; y++){
             for(int x = 0; x < Board.WIDTH; x++){
                 String bg;
@@ -110,8 +84,8 @@ public class Debug {
     //     }
     // }
     public void printAvailablePositions(int x, int y) {
-        int[][] ps = board.getAvailablePositions(x, y);
-        char[][] charBoard = board.getCharBoard();
+        int[][] ps = Control.getAvailablePositions(x, y);
+        char[][] charBoard = Control.getCharBoard();
         if(ps == null){
             System.out.println("No available position");
         }else{
@@ -196,37 +170,37 @@ public class Debug {
                                 printAvailablePositions(x, y);
                             }else{
                                 select = false;
-                                board.movePiece(x1, y1, x, y);
+                                Control.movePiece(x1, y1, x, y);
                                 printBoard(x, y);
                             }
                             break;
                         case 82: // R
-                            board.reset();
+                            Control.restart();
                             printBoard(x, y);
                             break;
                         case 51: // 3
-                            board.saveGame("C:/myFolder/codes/java/game1.dat", 18);
+                            Control.saveGame("C:/myFolder/codes/java/game1.dat", 18);
                             System.out.println("save");
                             break;
                         case 52: // 4
-                            board.loadGame("C:/myFolder/codes/java/game1.dat");
+                            Control.loadGame("C:/myFolder/codes/java/game1.dat");
                             printBoard(x, y);
                             break;
                         case 53: // 5
-                            int[] pos = AI.nextStepAI(0, 3, board);
-                            board.movePiece(pos[0], pos[1], pos[2], pos[3]);
+                            int[] pos = Control.nextStepAI(0, 0);
+                            Control.movePiece(pos[0], pos[1], pos[2], pos[3]);
                             printBoard(x, y);
                             break;
                         case 54: // 6
-                            int[] a = AlphaBeta.nextStep(3, board);
-                            board.movePiece(a[0], a[1], a[2], a[3]);
+                            int[] a = Control.nextStepAI(1, 3);
+                            Control.movePiece(a[0], a[1], a[2], a[3]);
                             printBoard(x, y);
                             break;
                         case 55: // 7
-                            System.out.println(AlphaBeta.evaluate(board));
+                            System.out.println(7);
                             break;
                         case 66: // B
-                            board.lastStep();
+                            Control.lastStep();
                             printBoard(x, y);
                             break;
                     }

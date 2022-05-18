@@ -1,9 +1,9 @@
 package chess;
-import chess.debug.Debug;
+import chess.debug.DebugControl;
 
 public class Chess {
     public static void main(String[] args) {
-        Debug d = new Debug();
+        DebugControl d = new DebugControl();
         d.run();
     }
 }

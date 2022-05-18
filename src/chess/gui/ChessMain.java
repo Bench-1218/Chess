@@ -9,6 +9,6 @@ public class ChessMain {
 
         Music music = new Music();
         music.start();
-// 1234
+// lalalalalala
     }
 }

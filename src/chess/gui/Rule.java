@@ -51,7 +51,7 @@ public class Rule extends JDialog {
 
             JButton level1 = new JButton("level1");
             this.add(level1);
-            level1.setBounds(50, 300, 100, 50);
+            level1.setBounds(100, 300, 100, 50);
             level1.addActionListener(e -> {
                 choose = 1;
                 this.setVisible(false);
@@ -60,7 +60,7 @@ public class Rule extends JDialog {
 
             JButton level2 = new JButton("level2");
             this.add(level2);
-            level2.setBounds(50, 350, 100, 50);
+            level2.setBounds(100, 350, 100, 50);
             level2.addActionListener(e -> {
                 choose = 2;
                 this.setVisible(false);
@@ -69,7 +69,7 @@ public class Rule extends JDialog {
 
             JButton level3 = new JButton("level3");
             this.add(level3);
-            level3.setBounds(50, 400, 100, 50);
+            level3.setBounds(100, 400, 100, 50);
             level3.addActionListener(e -> {
                 choose = 3;
                 this.setVisible(false);
@@ -79,12 +79,12 @@ public class Rule extends JDialog {
         }
 
         jLabel = new JLabel(imageIcon);
-        jLabel.setBounds(200, 0, 300, 500);
+        jLabel.setBounds(300, 0, 300, 500);
 
 
         this.add(jLabel);
         this.setLocationRelativeTo(null);
-        this.setSize(500, 500);
+        this.setSize(600, 500);
         this.setVisible(true);
         this.setResizable(false);
 

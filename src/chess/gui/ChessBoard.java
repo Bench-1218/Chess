@@ -29,6 +29,9 @@ public class ChessBoard extends JPanel {
     BufferedImage chessBoardBackground;
     BufferedImage rightBackground;
     boolean isBright = true;
+    boolean isHint = false;
+    boolean isPossible = false;
+
 
     //Move类
     int x;
@@ -40,15 +43,17 @@ public class ChessBoard extends JPanel {
 
     //基础设定
     Sound sound = new Sound();
-    JButton changeRight = new JButton("换皮肤");
-    JButton restart = new JButton("重置");
+    JButton changeRight = new JButton(new ImageIcon("./src/chess/gui/image/default.png"));
+    JButton restart = new JButton(new ImageIcon("./src/chess/gui/image/restart.png"));
     Status status = new Status();
     Round round = new Round();
-    JButton retract = new JButton("撤回一步");
-    JButton load = new JButton("加载");
-    JButton save = new JButton("保存");
+    JButton retract = new JButton(new ImageIcon("./src/chess/gui/image/retract.png"));
+    JButton load = new JButton(new ImageIcon("./src/chess/gui/image/load.png"));
+    JButton save = new JButton(new ImageIcon("./src/chess/gui/image/save.png"));
     Timer timer;
-    JButton wrongLoad = new JButton("wrong load");
+    JButton wrongLoad = new JButton(new ImageIcon("./src/chess/gui/image/wrongLoad.png"));
+    JButton hint = new JButton(new ImageIcon("./src/chess/gui/image/prompt.png"));
+    JButton possible = new JButton(new ImageIcon("./src/chess/gui/image/help.png"));
 
 
     public ChessBoard() {
@@ -66,8 +71,11 @@ public class ChessBoard extends JPanel {
         this.add(load);
         this.add(save);
         this.add(wrongLoad);
+        this.add(hint);
+        this.add(possible);
 
-        this.addMouseListener(new MouseAdapter() {
+
+        this.addMouseListener(new MouseMove(this) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("我真的点击了吗");
@@ -105,8 +113,11 @@ public class ChessBoard extends JPanel {
 
 
                     if (Control.movePiece(x1, y1, x2, y2)) {
-                        if (pieces[x1][y1] == 'p' && y2 == 7) {
+                        if (Control.ifWin() != 'N') {
+                            End end = new End(Control.ifWin(), chessBoard);
+                        }
 
+                        if (pieces[x1][y1] == 'p' && y2 == 7) {
                             Promotion promotion = new Promotion('p');
                             Control.setPiece(x2, y2, promotion.choose);
                             System.out.println(promotion.choose);
@@ -129,19 +140,20 @@ public class ChessBoard extends JPanel {
                     }
                 }
 
-//TODO 创建一个新类继承自mouseAdapter
-
-               /* if (Control.ifWin() != 'N') {
-                    End end = new End(Control.ifWin(),this );
-                }*/
-
-
                 ifPiecesMoveWrong();
                 pieceImage.pieceGetImage(pieces);
                 repaint();
+
+
+                if (Control.isInCheck('W') && Control.getTurn() == 'W' && twoPoint.size() == 4) {
+                    Message message = new Message('C');
+                }
+                if (Control.isInCheck('B') && Control.getTurn() == 'B' && twoPoint.size() == 4) {
+                    Message message = new Message('c');
+                }
+
             }
         });
-
 
     }
 
@@ -270,8 +282,10 @@ public class ChessBoard extends JPanel {
         this.add(load);
         this.add(save);
         this.add(wrongLoad);
+        this.add(hint);
+        this.add(possible);
 
-        this.addMouseListener(new MouseAdapter() {
+        this.addMouseListener(new MouseMove(this) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("我真的点击了吗");
@@ -308,6 +322,9 @@ public class ChessBoard extends JPanel {
 
 
                         if (Control.movePiece(x1, y1, x2, y2)) {
+                            if (Control.ifWin() != 'N') {
+                                End end = new End(Control.ifWin(), chessBoard);
+                            }
                             if (pieces[x1][y1] == 'p' && y2 == 7) {
 
                                 Promotion promotion = new Promotion('p');
@@ -331,22 +348,42 @@ public class ChessBoard extends JPanel {
                         }
                     }
                     ifPiecesMoveWrong();
-                }
-                else {
+                } else {
                     moveAI();
                 }
                 pieceImage.pieceGetImage(pieces);
                 repaint();
+
+                if (Control.isInCheck('W') && Control.getTurn() == 'W' && twoPoint.size() == 4) {
+                    Message message = new Message('C');
+                }
+                if (Control.isInCheck('B') && Control.getTurn() == 'B' && twoPoint.size() == 4) {
+                    Message message = new Message('c');
+                }
             }
         });
     }
 
     private void moveAI() {
         if (Control.getTurn() == 'B') {
+            int[] coordinateAI = new int[4];
             System.out.println("黑色AI被调用了");
             {
                 System.out.println("AI被调用了---------");
-                int[] coordinateAI = Control.nextStepAI(1, 1);
+                if (Rule.choose == 0) {
+                    coordinateAI = Control.nextStepAI(0, 1);
+                    System.out.println("0");
+                } else if (Rule.choose == 1) {
+                    coordinateAI = Control.nextStepAI(1, 1);
+                    System.out.println("1");
+                } else if (Rule.choose == 2) {
+                    coordinateAI = Control.nextStepAI(1, 2);
+                    System.out.println("2");
+                } else if (Rule.choose == 3) {
+                    coordinateAI = Control.nextStepAI(1, 3);
+                    System.out.println("3");
+                }
+
                 int x1 = coordinateAI[0];
                 x = coordinateAI[0];
                 int y1 = coordinateAI[1];
@@ -395,7 +432,7 @@ public class ChessBoard extends JPanel {
         }
 
         //换皮肤
-        changeRight.setIcon(new ImageIcon("./src/chess/gui/image/default.png"));
+
         changeRight.addActionListener(e -> {
             /*System.out.println("换皮肤被点击了");*/
             isBright = !isBright;
@@ -404,7 +441,7 @@ public class ChessBoard extends JPanel {
         });
 
         //重置
-        restart.setIcon(new ImageIcon("./src/chess/gui/image/restart.png"));
+        restart.setText("restart the game");
         restart.addActionListener(e -> {
             /*System.out.println("重置被点击了");*/
             twoPoint.clear();
@@ -416,8 +453,7 @@ public class ChessBoard extends JPanel {
         });
 
         //撤回
-        retract.setIcon(new ImageIcon("./src/chess/gui/image/retract.png"));
-        this.add(retract);
+        retract.setText("last step");
         retract.addActionListener(e -> {
             Control.lastStep();
             pieces = Control.getCharBoard();
@@ -432,11 +468,12 @@ public class ChessBoard extends JPanel {
             } else if (Control.getTurn() == 'B') {
                 blackTime--;
             }
-            wTime.setText("白方剩余时间" + whiteTime + "s");
-            bTime.setText("黑方剩余时间" + blackTime + "s");
+            wTime.setText("WHITE left time: " + whiteTime + "s");
+            bTime.setText("BLACK left time: " + blackTime + "s");
 
             if (blackTime == 0) {
                 Control.nextTurn();
+                repaint();
                 blackTime = 30;
             } else if (whiteTime == 0) {
                 Control.nextTurn();
@@ -454,20 +491,20 @@ public class ChessBoard extends JPanel {
         load.addActionListener(e -> {
             System.out.println("加载");
             JFileChooser loadChooser = new JFileChooser();
-            FileNameExtensionFilter filter=new FileNameExtensionFilter("棋盘","dat");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("棋盘", "dat");
             loadChooser.setFileFilter(filter);
             int ret = loadChooser.showOpenDialog(this);
-            if(ret==JFileChooser.APPROVE_OPTION){
-                File file=loadChooser.getSelectedFile();
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = loadChooser.getSelectedFile();
                 Control.loadGame(file.getPath());
             }
             pieces = Control.getCharBoard();
             if (Control.getTurn() == 'W') {
                 whiteTime = Control.getLeftTime();
-                blackTime=30;
+                blackTime = 30;
             } else if (Control.getTurn() == 'B') {
                 blackTime = Control.getLeftTime();
-                whiteTime=30;
+                whiteTime = 30;
             }
             repaint();
         });
@@ -483,25 +520,40 @@ public class ChessBoard extends JPanel {
             }
             JFileChooser saveChooser = new JFileChooser();
             int ret = saveChooser.showSaveDialog(this);
-            if(ret==JFileChooser.APPROVE_OPTION){
-                File file=saveChooser.getSelectedFile();
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = saveChooser.getSelectedFile();
                 Control.saveGame(file.getPath(), time);
             }
             System.out.println(time);
         });
 
-        wrongLoad.addActionListener(e->{
+        wrongLoad.setText("wrong load");
+        wrongLoad.addActionListener(e -> {
             JFileChooser wrongLoadChooser = new JFileChooser();
             int ret = wrongLoadChooser.showOpenDialog(this);
-            if(ret==JFileChooser.APPROVE_OPTION){
-                File file=wrongLoadChooser.getSelectedFile();
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = wrongLoadChooser.getSelectedFile();
                 String s = file.getPath();
-                if(!s.substring(s.length()-4).equals("dat")){
+                if (!s.substring(s.length() - 4).equals("dat")) {
                     System.out.println(s);
-                    LoadMessage message=new LoadMessage('4');
+                    LoadMessage message = new LoadMessage('4');
                 }
             }
         });
+
+        hint.addActionListener(e -> {
+            isHint = !isHint;
+            isPossible = false;
+            twoPoint.clear();
+            repaint();
+        });
+
+        possible.addActionListener(e -> {
+            isPossible = !isPossible;
+            repaint();
+        });
+
+
     }
 
     @Override
@@ -511,11 +563,6 @@ public class ChessBoard extends JPanel {
         PieceImage pieceImage = new PieceImage();
         /*System.out.println("重画被调用了");*/
         super.paintComponent(g);
-
-//todo this移上去
-        if (Control.ifWin() != 'N') {
-            End end = new End(Control.ifWin(), this);
-        }
 
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -582,11 +629,52 @@ public class ChessBoard extends JPanel {
                 e.printStackTrace();
             }
         }
-
         g.drawImage(rightBackground, getHeight(), 0, this.getWidth() - getHeight(), this.getHeight(), null);
-    }
 
+        //一层透明膜
+        g.setColor(new Color(255, 255, 255, 175));
+        g.fillRect(getHeight() + (getWidth() - getHeight()) / 20, getHeight() / 4, (getWidth() - getHeight()) * 9 / 10, getHeight() / 3);
+
+//提示
+        if (isHint && twoPoint.size() == 0) {
+            int[] AIHint = Control.nextStepAI(1, 3);
+            int x1 = AIHint[0];
+            int y1 = AIHint[1];
+            int x2 = AIHint[2];
+            int y2 = AIHint[3];
+            System.out.println(x1 + "," + y1 + "  " + x2 + "," + y2);
+
+            g.setColor(new Color(45, 236, 154));
+            g.drawOval((int) (xStart2 + x1 * gridLength2), (int) (yStart2 + y1 * gridLength2),
+                    (int) gridLength2, (int) gridLength2);
+            g.drawOval((int) (xStart2 + x2 * gridLength2), (int) (yStart2 + y2 * gridLength2),
+                    (int) gridLength2, (int) gridLength2);
+        }
+
+        if (twoPoint.size() != 0) {
+            isHint = false;
+        }
+
+
+//合法落字点
+        if (isPossible && twoPoint.size() != 4) {
+            g.setColor(new Color(250, 124, 124, 150));
+//TODO: 如果可移动的位置
+            if (Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)) != null) {
+                int[][] possibleCoordinate = Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1));
+                for (int j = 0; j < possibleCoordinate.length; j++) {
+                    g.fillOval((int) (xStart2 + possibleCoordinate[j][0] * gridLength2),
+                            (int) (yStart2 + possibleCoordinate[j][1] * gridLength2),
+                            (int) gridLength2, (int) gridLength2);
+                }
+
+            }
+        }
+
+        if (twoPoint.size() == 4) {
+            isPossible = false;
+        }
+    }
 }
 
-
-
+//

@@ -13,7 +13,6 @@ public class Status extends JPanel {
         this.playerLabel = new JLabel();
         this.playerLabel.setSize(300, 200);
         this.playerLabel.setFont(new Font("Calibri", Font.BOLD, 20));
-        playerLabel.setBackground(Color.YELLOW);
 
         if(Control.getTurn()=='W'){
             currentPlayer="WHITE";
@@ -22,7 +21,7 @@ public class Status extends JPanel {
         }
 
         this.setPlayerText(currentPlayer);
-
+        this.setOpaque(false);
         add(playerLabel);
 
     }
@@ -40,8 +39,7 @@ public class Status extends JPanel {
         }else if(Control.getTurn()=='B'){
             currentPlayer="BLACK";
         }
-
         this.setPlayerText(currentPlayer);
-
+        this.setOpaque(false);
     }
 }

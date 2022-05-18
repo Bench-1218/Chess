@@ -17,6 +17,10 @@ public class Message extends JDialog {
             imageIcon = new ImageIcon("./src/chess/gui/image/noPiece.png");
         }else if (type == 'i') {
             imageIcon = new ImageIcon("./src/chess/gui/image/illegalMove.png");
+        }else if(type=='C'){
+            imageIcon = new ImageIcon("./src/chess/gui/image/whiteInCheck.png");
+        }else if(type=='c'){
+            imageIcon = new ImageIcon("./src/chess/gui/image/blackInCheck.png");
         }
 
         this.setModal(true);

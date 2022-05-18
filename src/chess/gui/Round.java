@@ -13,12 +13,10 @@ public class Round extends JPanel {
         this.roundLabel = new JLabel();
         this.roundLabel.setSize(300, 200);
         this.roundLabel.setFont(new Font("Calibri", Font.BOLD, 20));
-        roundLabel.setBackground(Color.YELLOW);
-
 
         roundLabel.setText("Round:" + Control.getRound());
-
         add(roundLabel);
+        this.setOpaque(false);
 
     }
 
@@ -27,8 +25,6 @@ public class Round extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         roundLabel.setText("Round:" + Control.getRound());
-
+        this.setOpaque(false);
     }
-
-
 }

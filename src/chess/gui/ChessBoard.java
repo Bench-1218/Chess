@@ -349,7 +349,7 @@ public class ChessBoard extends JPanel {
                     }
                     ifPiecesMoveWrong();
                 } else {
-                    moveAI();
+                    moveAI(chessBoard);
                 }
                 pieceImage.pieceGetImage(pieces);
                 repaint();
@@ -364,7 +364,7 @@ public class ChessBoard extends JPanel {
         });
     }
 
-    private void moveAI() {
+    private void moveAI(ChessBoard chessBoard) {
         if (Control.getTurn() == 'B') {
             int[] coordinateAI = new int[4];
             System.out.println("黑色AI被调用了");
@@ -400,6 +400,9 @@ public class ChessBoard extends JPanel {
                 System.out.println(x1 + "|" + y1 + "|" + x2 + "|" + y2);
 
                 if (Control.movePiece(x1, y1, x2, y2)) {
+                    if (Control.ifWin() != 'N') {
+                        End end = new End(Control.ifWin(), chessBoard);
+                    }
                     if (pieces[x1][y1] == 'p' && y2 == 7) {
                         Promotion promotion = new Promotion('p');
                         Control.setPiece(x2, y2, promotion.choose);
@@ -657,10 +660,11 @@ public class ChessBoard extends JPanel {
 
 
 //合法落字点
-        if (isPossible && twoPoint.size() != 4) {
+        if (isPossible && twoPoint.size() == 2) {
             g.setColor(new Color(250, 124, 124, 150));
 //TODO: 如果可移动的位置
-            if (Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)) != null) {
+            if (Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)) != null&&
+                    Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)).length!=0) {
                 int[][] possibleCoordinate = Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1));
                 for (int j = 0; j < possibleCoordinate.length; j++) {
                     g.fillOval((int) (xStart2 + possibleCoordinate[j][0] * gridLength2),

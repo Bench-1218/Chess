@@ -13,6 +13,7 @@ public class Rule extends JDialog {
         this.setModal(true);
         this.setTitle("rule");
         this.setLayout(null);
+        this.setBounds(200,200,600,500);
         if (i == 1) {
             JButton confirm = new JButton("yes");
             imageIcon = new ImageIcon("./src/chess/gui/image/rule1.GIF");
@@ -33,7 +34,7 @@ public class Rule extends JDialog {
                 });
 
             });
-            confirm.setBounds(50, 400, 70, 50);
+            confirm.setBounds(100, 400, 70, 50);
             this.add(confirm);
 
             //normal
@@ -42,7 +43,7 @@ public class Rule extends JDialog {
             imageIcon = new ImageIcon("./src/chess/gui/image/aiRule.png");
             JButton random = new JButton("random");
             this.add(random);
-            random.setBounds(50, 250, 100, 50);
+            random.setBounds(100, 250, 100, 50);
             random.addActionListener(e -> {
                 choose = 0;
                 this.setVisible(false);
@@ -84,7 +85,7 @@ public class Rule extends JDialog {
 
         this.add(jLabel);
         this.setLocationRelativeTo(null);
-        this.setSize(600, 500);
+//        this.setSize(600, 500);
         this.setVisible(true);
         this.setResizable(false);
 

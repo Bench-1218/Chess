@@ -33,7 +33,7 @@ public class Music extends Thread {
                 sdl.write(buffer, 0, nByte);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           /* e.printStackTrace();*/
         }
     }
 }

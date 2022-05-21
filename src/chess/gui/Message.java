@@ -8,7 +8,6 @@ public class Message extends JDialog {
     ImageIcon imageIcon;
     public Message(char c){
         type=c;
-
         if(type=='W'){
             imageIcon = new ImageIcon("./src/chess/gui/image/whiteTurn.png");
         } else if (type == 'B') {
@@ -21,6 +20,14 @@ public class Message extends JDialog {
             imageIcon = new ImageIcon("./src/chess/gui/image/whiteInCheck.png");
         }else if(type=='c'){
             imageIcon = new ImageIcon("./src/chess/gui/image/blackInCheck.png");
+        }else if(type=='1'){
+            imageIcon = new ImageIcon("./src/chess/gui/image/101.png");
+        }else if(type=='2'){
+            imageIcon = new ImageIcon("./src/chess/gui/image/102.png");
+        }else if(type=='3'){
+            imageIcon = new ImageIcon("./src/chess/gui/image/103.png");
+        }else if(type=='4'){
+            imageIcon = new ImageIcon("./src/chess/gui/image/104.png");
         }
 
         this.setModal(true);
@@ -46,7 +53,7 @@ public class Message extends JDialog {
 
         this.add(layeredPane);
         this.setLocationRelativeTo(null);
-        this.setSize(400, 300);
+        this.setBounds(500,275,400,300);
         this.setVisible(true);
         this.setResizable(false);
 

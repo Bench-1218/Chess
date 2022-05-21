@@ -10,7 +10,7 @@ public class FirstFrame extends JFrame {
     static int frameHeight = 500;
 
     public FirstFrame() {
-        setTitle("firstChess");
+        setTitle("Chess");
 
         JLayeredPane layeredPane = new JLayeredPane();
         ImageIcon image = new ImageIcon("./src/chess/gui/image/Background.png");//背景图片

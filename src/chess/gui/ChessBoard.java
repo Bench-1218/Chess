@@ -28,6 +28,7 @@ public class ChessBoard extends JPanel {
 
     BufferedImage chessBoardBackground;
     BufferedImage rightBackground;
+    BufferedImage possibleImage;
     boolean isBright = true;
     boolean isHint = false;
     boolean isPossible = false;
@@ -167,12 +168,14 @@ public class ChessBoard extends JPanel {
         if (twoPoint.size() == 2) {
             if (Control.getTurn() == 'W') {
                 if (pieces[x][y] >= 65 && pieces[x][y] <= 90) {
+                    isPossible=false;
                     twoPoint.clear();
                 }
                 twoPoint.add(x);
                 twoPoint.add(y);
             } else if (Control.getTurn() == 'B') {
                 if (pieces[x][y] >= 97 && pieces[x][y] <= 119) {
+                    isPossible=false;
                     twoPoint.clear();
                 }
                 twoPoint.add(x);
@@ -348,9 +351,9 @@ public class ChessBoard extends JPanel {
                         }
                     }
                     ifPiecesMoveWrong();
-                } else {
-                    moveAI(chessBoard);
                 }
+                moveAI(chessBoard);
+
                 pieceImage.pieceGetImage(pieces);
                 repaint();
 
@@ -458,7 +461,12 @@ public class ChessBoard extends JPanel {
         //撤回
         retract.setText("last step");
         retract.addActionListener(e -> {
-            Control.lastStep();
+            if(i==1){
+                Control.lastStep();
+                Control.lastStep();
+            }else if(i==0){
+                Control.lastStep();
+            }
             pieces = Control.getCharBoard();
             repaint();
             blackTime = 30;
@@ -476,11 +484,18 @@ public class ChessBoard extends JPanel {
 
             if (blackTime == 0) {
                 Control.nextTurn();
+                isHint=false;
+                isPossible=false;
                 repaint();
                 blackTime = 30;
             } else if (whiteTime == 0) {
                 Control.nextTurn();
                 System.out.println(Control.getTurn());
+                isHint=false;
+                isPossible=false;
+                if(i==1){
+                    moveAI(this);
+                }
                 repaint();
                 whiteTime = 30;
             }
@@ -536,10 +551,16 @@ public class ChessBoard extends JPanel {
             int ret = wrongLoadChooser.showOpenDialog(this);
             if (ret == JFileChooser.APPROVE_OPTION) {
                 File file = wrongLoadChooser.getSelectedFile();
-                String s = file.getPath();
-                if (!s.substring(s.length() - 4).equals("dat")) {
-                    System.out.println(s);
-                    LoadMessage message = new LoadMessage('4');
+                int number=Control.loadFormatBoard(file);
+                if(number==101){
+                    Message message=new Message('1');
+                }else if(number==102){
+                    Message message=new Message('2');
+                }else if(number==103){
+                    Message message=new Message('3');
+                }else if(number==104){
+                    System.out.println(104);
+                    Message message=new Message('4');
                 }
             }
         });
@@ -620,14 +641,12 @@ public class ChessBoard extends JPanel {
         if (isBright) {
             try {
                 rightBackground = ImageIO.read(new File("./src/chess/gui/image/bright.png"));
-//                System.out.println("1右边背景被重画了");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 rightBackground = ImageIO.read(new File("./src/chess/gui/image/dark.png"));
-//                System.out.println("2右边背景被重画了");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -661,15 +680,29 @@ public class ChessBoard extends JPanel {
 
 //合法落字点
         if (isPossible && twoPoint.size() == 2) {
-            g.setColor(new Color(250, 124, 124, 150));
+
+            /*g.setColor(new Color(250, 124, 124, 150));*/
 //TODO: 如果可移动的位置
-            if (Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)) != null&&
-                    Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)).length!=0) {
+            if (Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)) != null &&
+                    Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1)).length != 0) {
                 int[][] possibleCoordinate = Control.getAvailablePositions(twoPoint.get(0), twoPoint.get(1));
                 for (int j = 0; j < possibleCoordinate.length; j++) {
-                    g.fillOval((int) (xStart2 + possibleCoordinate[j][0] * gridLength2),
+
+                    try {
+                        possibleImage = ImageIO.read(new File("./src/chess/gui/image/possible.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    g.drawImage(possibleImage, (int) (0.045 * chessBoardHeight + possibleCoordinate[j][0] * gridLength2),
                             (int) (yStart2 + possibleCoordinate[j][1] * gridLength2),
-                            (int) gridLength2, (int) gridLength2);
+                            getHeight() / 11, getHeight() / 11, null);
+
+
+
+                   /* g.fillOval((int) (xStart2 + possibleCoordinate[j][0] * gridLength2),
+                            (int) (yStart2 + possibleCoordinate[j][1] * gridLength2),
+                            (int) gridLength2, (int) gridLength2);*/
                 }
 
             }

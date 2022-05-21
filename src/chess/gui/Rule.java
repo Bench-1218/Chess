@@ -6,8 +6,10 @@ import java.awt.event.ComponentEvent;
 
 public class Rule extends JDialog {
     ImageIcon imageIcon;
+    ImageIcon ruleIcon;
     JLabel jLabel;
-    static int choose; //不行就换static
+    JLabel ruleLabel;
+    static int choose;
 
     public Rule(int i) {
         this.setModal(true);
@@ -36,6 +38,9 @@ public class Rule extends JDialog {
             });
             confirm.setBounds(100, 400, 70, 50);
             this.add(confirm);
+
+            ruleIcon = new ImageIcon("./src/chess/gui/image/normalRule.png");
+
 
             //normal
         } else if (i == 2) {
@@ -77,13 +82,19 @@ public class Rule extends JDialog {
                 openChessBoard();
             });
 
+            ruleIcon = new ImageIcon("./src/chess/gui/image/AIRules.png");
+
         }
 
         jLabel = new JLabel(imageIcon);
         jLabel.setBounds(300, 0, 300, 500);
 
+        ruleLabel = new JLabel(ruleIcon);
+        ruleLabel.setBounds(0, 0, 300, 500);
+
 
         this.add(jLabel);
+        this.add(ruleLabel);
         this.setLocationRelativeTo(null);
 //        this.setSize(600, 500);
         this.setVisible(true);

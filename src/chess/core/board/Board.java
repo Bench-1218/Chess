@@ -379,7 +379,7 @@ public class Board {
             Scanner sc = new Scanner(f);
             for(int y = 0; y < Board.HEIGHT; y++){
                 String s = sc.nextLine();
-                if(s.length() > Board.HEIGHT){
+                if(s.length() != Board.HEIGHT ){
                     sc.close();
                     return 101;
                 }
@@ -396,7 +396,13 @@ public class Board {
                     }
                 }
             }
-            String s = sc.nextLine();
+            String s;
+            try{
+                s = sc.nextLine();
+            }catch(Exception e){
+                sc.close();
+                return 103;
+            }
             if(s.length() > 1){
                 sc.close();
                 return 101;
